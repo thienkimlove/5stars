@@ -1,0 +1,10 @@
+<?php
+$config = array(
+		'debug' => 2,       
+		 'Api' => array(
+			'scheme' => 'http',
+			'host' => 'api.5stars.vn',
+			'path' => '/'    
+		 ),
+		 'wap' => 'http://wap.5stars.vn'       
+);

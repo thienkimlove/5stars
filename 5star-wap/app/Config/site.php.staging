@@ -1,0 +1,12 @@
+<?php
+$config = array(
+		'debug' => 2,     
+		'fbId'=> '540132399391603',  
+        'fbSecret' => '162f0a3e7f7bb26b7a5725eb08498962',    
+		 'Api' => array(
+			'scheme' => 'http',
+			'host' => 'stage.5stars.vn',
+			'path' => '/'    
+		 ),
+		 'wap' => 'http://demo.5stars.vn'           
+);

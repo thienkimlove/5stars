@@ -1,0 +1,21 @@
+1. Cap nhat file Entries.php
+- Go to dong 34 co du lieu nhu duoi day
+$RSAClass->GetPrivatekeyFrompemFile("./Key/private_key.pem") 
+Chu y: 
+- Trong thu muc key da co file Epay_publickey.pem, de nghi khong sua doi gì file nay.
+- Doi ten file private_key.txt dinh kem trong mail thanh file private_key.pem
+- copy file private key do VNPT EPAY cung cap vao thu muc Key.
+2. Cap nhat file home_.php
+Cap nhat khoi tao gia tri cac bien duoi day theo du lieu vnpt epay cung cap.
+- $m_PartnerID = "";
+- $m_MPIN = "";
+- $m_UserName = "";
+- $m_Pass = "";
+- $m_PartnerCode = "";
+3. can init cac' ddl duoi day trong file php.ini
+- extension=php_soap.dll
+- extension=php_openssl.dll
+
+
+***Note: chu y khi deploy tren Linux phan biet ky tu hoa/thuong nen ung dung co the khong doc dung file private key.
+

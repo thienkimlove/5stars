@@ -1,0 +1,21 @@
+<?php
+class DATABASE_CONFIG {
+
+	public $default = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => '118.69.171.36',  //118.69.171.36
+		'login' => 'api_game_local',  //api_game_local
+		'password' => 'edW2fDwUNbNBVr9C',  //edW2fDwUNbNBVr9C
+		'database' => 'api_game_local',    //api_game_local
+		'encoding' => 'utf8'
+	);
+	public $test = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => '118.69.171.36',
+		'login' => 'api_game_test', 
+		'password' => 'HqLVCT9VecJpK7Mb', 
+		'database' => 'api_game_test',
+	);
+}

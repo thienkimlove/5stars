@@ -1,0 +1,83 @@
+/***********************************************************************************************/
+/* Custom Styles */
+/***********************************************************************************************/
+body {
+color:#c5947c; background: #261313;
+}
+#fb{
+	margin:0 auto;
+	float: none;
+	height: 160px;
+	overflow: hidden;
+}
+
+.header{
+	margin-top: -150px;	
+}
+.header a:hover{cursor: pointer;}
+.main { background:url(../img/bakhi/bg_repeat_cnt.jpg) 50% 0 repeat-y; width:100%; overflow:hidden;}
+.main .content {line-height:1.6em;	margin-bottom:10px;float: none;margin:0 auto;font-size: 1.3em;padding:1em; max-width:520px;min-height: 250px;text-indent: 1em;}
+.content-text {max-width: 550px;float: none; margin: 0 auto;}
+.main a:hover {	text-decoration:underline;}
+.content-bottom {max-width:540px;margin: 20px auto;}
+.content-bottom .xemthem a{width: 195px; height: 60px; background: url(../img/bakhi/xemtiep.png) no-repeat 0 0; display: block; margin: 0 auto;}
+.content-bottom .xemthem a:hover{background-position: 0 -61px;cursor: pointer;}
+.icon{display: inline;height: 130px;width: 50px;border:1px solid;}
+ @media (min-width: 979px) { 
+.header{
+	margin-top: -100px;	
+}
+.header img{
+	max-width: 180px;
+}         
+ }
+@media (max-width: 979px) {
+.header{
+	margin-top: -60px;	
+}
+.header img{
+	max-width: 140px;
+}
+}
+@media (max-width: 768px) {
+.header{
+	margin-top: -60px;	
+}
+.header img{
+	max-width: 100px;
+}
+}
+@media (max-width: 480px) {
+.header{
+	margin-top: -60px;	
+}
+.header img{
+	max-width: 80px;
+}
+.text_title{padding-left:20px;padding-right:20px;}
+.text_title img{width: 300px;}
+.main{font-size: 0.9em;}
+}
+@media (min-width: 320px) and (max-width:480px) {
+.header{
+	margin-top: -50px;	
+}
+.header img{
+	max-width: 65px;
+}
+.text_title{padding-left:20px;padding-right:20px;}
+.text_title img{width: 200px;}
+.main{font-size: 0.9em;}
+}
+@media (max-width: 320px) {
+.header{
+	margin-top: -50px;	
+}
+.header img{
+	max-width: 50px;
+}
+.text_title{padding-left:20px;padding-right:20px;}
+.text_title img{width: 200px;}
+.main{font-size: 0.9em;}
+}
+.hide{display: none;}

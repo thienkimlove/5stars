@@ -1,0 +1,38 @@
+2014-11-12 18:53:26 Error: [MissingViewException] View file "/var/www/trunk/5star-api/app/View/Users/send.ctp" is missing.
+Exception Attributes: array (
+  'file' => '/var/www/trunk/5star-api/app/View/Users/send.ctp',
+)
+Request URL: /trunk/5star-api/users/send
+Stack Trace:
+#0 /var/www/trunk/5star-api/lib/Cake/View/View.php(468): View->_getViewFileName(NULL)
+#1 /var/www/trunk/5star-api/lib/Cake/Controller/Controller.php(948): View->render(NULL, NULL)
+#2 /var/www/trunk/5star-api/lib/Cake/Routing/Dispatcher.php(194): Controller->render()
+#3 /var/www/trunk/5star-api/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest), Object(CakeResponse))
+#4 /var/www/trunk/5star-api/app/webroot/index.php(109): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2014-11-13 20:33:53 Error: 232323
+2014-11-13 20:36:50 Error: here
+2014-11-13 20:38:24 Error: here
+2014-11-13 20:38:25 Error: here
+2014-11-13 20:55:13 Error: Array
+(
+    [Event] => Array
+        (
+            [id] => 1
+            [fullname] => tieungao
+            [username] => tieungao
+            [email] => tieungao@yahoo.com
+            [password] => 2467d3744600858cc9026d5ac6005305
+            [information] => { "birth":"1-1-2002", "gender": "Nam", "mobile": "0974743900"}
+            [created] => 2013-06-24 02:44:28
+            [modified] => 2013-10-16 16:48:16
+            [status] => active
+            [identify] => 
+            [role] => 
+            [facebook_id] => 
+            [vip] => 
+        )
+
+)
+
+2014-11-14 14:44:08 Error: read from cache

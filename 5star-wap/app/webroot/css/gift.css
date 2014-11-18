@@ -1,0 +1,35 @@
+#body-content{
+    margin: 0 auto;
+    background: url(../img/fb/bg.jpg) center top no-repeat;
+    height: 635px;
+    position: relative;
+    max-width: 810px;
+}
+#content{position: absolute;top:5%;right:2%;color:#fff;font-size: 20px; width: 250px;padding: 10px}
+#get-code{background: url(../img/fb/btn_nhancode-out.png) center top no-repeat transparent;border: 0px;width: 202px;height: 67px;-webkit-transition:  margin-left 1s;
+    -moz-transition: margin 1s;
+    -o-transition: margin 1s;
+    transition: margin 1s;}
+#get-code:hover{background: url(../img/fb/btn_nhancode-in.png) center top no-repeat transparent;margin-left:15px; }
+#like{margin-left: 70px;}
+#result{position: absolute;background: url('../img/fb/nhan-code.png')center top no-repeat;top:0%;right:2%;color:#fff;font-size: 20px;width: 371px;height: 355px;display:none; }
+#code{margin-top:175px;margin-left:70px;font-size:24px;text-indent: 20px;}
+.warning{color:#F2CA27}
+#icons{position: absolute;bottom:1%;right:12%;color:#fff;font-size: 20px; width: 250px;padding: 10px;}
+#ios{background: url('../img/fb/download-02.png')center top no-repeat transparent;width:301px;height:101px;border:0px;margin:5px 0px;-webkit-transition:  margin-left 1s;
+    -moz-transition: margin 1s;
+    -o-transition: margin 1s;
+    transition: margin 1s;}
+#ios:hover{margin-left:15px;}
+#android{background: url('../img/fb/download-01.png')center top no-repeat transparent;width:302px;height:103px;border:0px;margin:5px 0px;-webkit-transition:  margin-left 1s;
+    -moz-transition: margin 1s;
+    -o-transition: margin 1s;
+    transition: margin 1s;}
+#android:hover{margin-left:15px;}
+#homepage{background: url('../img/fb/btn_home-out.png')center top no-repeat transparent;width: 71px;height: 58px;border:0px;}
+#homepage:hover{background: url('../img/fb/btn_home-in.png')center top no-repeat transparent;}
+#fanpage{background: url('../img/fb/btn_facebook-out.png')center top no-repeat transparent;width: 72px;height: 58px;border:0px; -webkit-transition: margin-left 1s;
+    -moz-transition: margin-left 1s;
+    -o-transition: margin-left 1s;
+    transition: margin-left 1s;}
+#fanpage:hover{background: url('../img/fb/btn_facebook-in.png')center top no-repeat transparent;margin-left:15px;}

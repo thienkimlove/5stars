@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <title>5Stars API example for Game System</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script type="text/javascript">
+           $(function(){
+                resetInformation();
+                $('#login').submit(function(event){
+                    event.preventDefault();
+                    var username = $('#username').val();
+                    var password = $('#password').val();
+                    $.ajax({
+                        url: "http://stage.5stars.vn/users/auth.json",
+                        type: 'GET',
+                        dataType: 'json',
+                        headers: {"Authorization": "Basic "+ base64_encode(username + ':' + password)},
+                        success: function(data) { 
+                            if (data.user.User != undefined) {
+                                showInformation(data);
+                            } else {
+                                resetInformation();
+                                alert('login or password is incorrect!');
+                            }
+                        },                                            
+                    })
+
+                });
+
+            });
+            
+            function resetInformation() {
+                $('#data').hide();
+                $('#userid').html('');
+                $('#fullname').html('');
+                $('#email').html('');
+            }
+            
+            function showInformation(data) {
+                $('#data').show();
+                $('#userid').html(data.user.User.id);
+                $('#fullname').html(data.user.User.fullname);
+                $('#email').html(data.user.User.email);
+                
+            }
+            
+            function base64_encode(input) {
+                    var output = "";
+                    var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+                    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+                    var i = 0;
+                    
+                    input = input.replace(/\r\n/g,"\n");
+                    var utftext = "";
+
+                    for (var n = 0; n < input.length; n++) {
+
+                        var c = input.charCodeAt(n);
+
+                        if (c < 128) {
+                            utftext += String.fromCharCode(c);
+                        }
+                        else if((c > 127) && (c < 2048)) {
+                            utftext += String.fromCharCode((c >> 6) | 192);
+                            utftext += String.fromCharCode((c & 63) | 128);
+                        }
+                        else {
+                            utftext += String.fromCharCode((c >> 12) | 224);
+                            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                            utftext += String.fromCharCode((c & 63) | 128);
+                        }
+
+                    }
+
+
+                    input = utftext;
+
+                    while (i < input.length) {
+
+                        chr1 = input.charCodeAt(i++);
+                        chr2 = input.charCodeAt(i++);
+                        chr3 = input.charCodeAt(i++);
+
+                        enc1 = chr1 >> 2;
+                        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                        enc4 = chr3 & 63;
+
+                        if (isNaN(chr2)) {
+                            enc3 = enc4 = 64;
+                        } else if (isNaN(chr3)) {
+                            enc4 = 64;
+                        }
+
+                        output = output +
+                        keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+                        keyStr.charAt(enc3) + keyStr.charAt(enc4);
+
+                    }
+
+                    return output;
+                }
+           
+        </script>
+    </head>
+    <body>
+        <form id="login">
+            <p>
+                <label>Username : </label><br/>
+                <input id="username" name="username" type="text" />
+            </p>
+            <p>
+                <label>Password : </label><br/>
+                <input id="password" name="password" type="password" />
+            </p>
+            <p><button type="submit">Submit</button></p>
+        </form>
+        <div id="data">
+        <h2>Information response from API</h2>
+         <p>
+            ID : <span id="userid"></span>
+         </p>
+         
+         <p>
+            Fullname : <span id="fullname"></span>
+         </p>
+         
+         <p>
+            Email : <span id="email"></span>
+         </p>
+        
+        </div>
+
+
+    </body>
+</html>

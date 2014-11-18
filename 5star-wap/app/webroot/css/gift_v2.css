@@ -1,0 +1,32 @@
+#body-content{
+    margin: 0 auto;
+    background: url(../img/fb/bg.png) center top no-repeat;
+    height: 635px;
+    position: relative;
+    max-width: 810px;
+}
+#content{position: absolute;top:5%;right:1%;color:#fff;font-size: 20px; width: 250px;}
+#get-code{background: url(../img/fb1/btn01.png) center top no-repeat transparent;border: 0px;width: 202px;height: 67px;-webkit-transition:  margin-left 1s;
+    -moz-transition: margin 1s;
+    -o-transition: margin 1s;
+    transition: margin 1s;}
+#get-code:hover{margin-left:15px;background: url(../img/fb1/btn02.png) center top no-repeat transparent;border:0px; }
+#like{margin-left: 70px;}
+#result{position: absolute;background: url('../img/fb1/chuc-mung.png')center top no-repeat;top:10%;right:0%;color:#fff;font-size: 20px;width: 301px;height: 355px;display:none  }
+#code{margin-top:60px;margin-left:31px;font-size:24px;background:#6F1606;width:233px;text-align: center}
+.warning{color:#FFFF00}
+select{background:#E33B20;border:1px solid;color:#FFEF03;font-size: 0.9em}
+#button-top{
+    position: absolute;top: 45px;left:180px;font-size: 1.2em;font: bold;
+}
+#button-top a{
+    color:#7e0800;
+}
+#button-top a:hover{
+    color:#df1010;
+    text-decoration: none;
+}
+#button-bottom{
+    position: absolute;bottom: 2%;
+}
+#message{font-size:0.9em ;padding-right: 30px}

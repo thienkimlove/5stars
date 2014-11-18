@@ -1,0 +1,10 @@
+<?php
+$config = array(
+		'debug' => 2,       
+		 'Api' => array(
+			'scheme' => 'http',
+			'host' => 'localhost',
+			'path' => '/trunk/5star-api/'    
+		 ),
+		 'wap' => 'http://localhost/trunk/5star-wap'           
+);

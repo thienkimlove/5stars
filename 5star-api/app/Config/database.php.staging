@@ -1,0 +1,21 @@
+<?php
+class DATABASE_CONFIG {
+
+	public $default = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'api_game_stage', 
+		'password' => 'bd5FrSJnpejfG4xh',
+		'database' => 'api_game_stage',
+		'encoding' => 'utf8'
+	);
+	public $test = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => '118.69.171.36',
+		'login' => 'api_game_test', 
+		'password' => 'HqLVCT9VecJpK7Mb', 
+		'database' => 'api_game_test',
+	);
+}
