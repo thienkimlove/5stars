@@ -124,25 +124,43 @@ CakeLog::config('error', array(
 
 //====================Redis==================//
 $prefix = 'api2_';
-Cache::config('short', array(
-    'engine' => 'Redis',
-    'server' => '118.69.171.45',
-    'port' => 6379,
-    'prefix' => $prefix . '_short_redis_',
-    'password' => 'tieungaoredis',
-    'duration' => '+1 hours',
-    'path' => CACHE,
-    'prefix' => 'cake_short_'
-));
+if (class_exists('Redis')) {
+    Cache::config('short', array(
+        'engine' => 'Redis',
+        'server' => '118.69.171.45',
+        'port' => 6379,
+        'prefix' => $prefix . '_short_redis_',
+        'password' => 'tieungaoredis',
+        'duration' => '+1 hours',
+        'path' => CACHE,         
+    ));
 
-// long
-Cache::config('long', array(
-    'engine' => 'Redis',
-    'duration' => '+1 week',
-    'server' => '118.69.171.45',
-    'prefix' => $prefix . '_long_redis_',
-    'port' => 6379,
-    'password' => 'tieungaoredis',
-    'probability' => 100,
-    'path' => CACHE . 'long' . DS,
-));
+    // long
+    Cache::config('long', array(
+        'engine' => 'Redis',
+        'duration' => '+1 week',
+        'server' => '118.69.171.45',
+        'prefix' => $prefix . '_long_redis_',
+        'port' => 6379,
+        'password' => 'tieungaoredis',
+        'probability' => 100,
+        'path' => CACHE,
+    ));
+
+}  else {
+    Cache::config('short', array(
+        'engine' => 'File',        
+        'prefix' => $prefix . '_short_redis_',        
+        'duration' => '+1 hours',
+        'path' => CACHE,        
+    ));
+
+    // long
+    Cache::config('long', array(
+        'engine' => 'File',
+        'duration' => '+1 week',       
+        'prefix' => $prefix . '_long_redis_',        
+        'path' => CACHE,
+    ));
+
+}
