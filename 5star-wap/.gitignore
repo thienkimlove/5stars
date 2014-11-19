@@ -2,7 +2,6 @@
 #################################################
 /app/Config/email.php
 /app/Config/site.php
-/app/tmp
 
 
 # OS generated files #
