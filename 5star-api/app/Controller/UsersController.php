@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
     var $uses = array('User', 'Token', 'Friend', 'History');
 
-   
+
 
     //using for game to check the authenticate, will be remove next time.(support both GET AND POST)
     public function checkLogin() {
@@ -146,24 +146,16 @@ class UsersController extends AppController {
 
     public function checkReturn(){     
         $data = array();      
-        if ($this->_getParam('gameId') && $this->_getParam('channelId') && $this->_getParam('secret') && $this->_getParam('uid')) {
-            /*$this->User->unbindAll();
-            $user = $this->User->findById($this->_getParam('uid'));
-            if ($user && $this->_getParam('secret') == md5('tdk-login-return'.$user['User']['id'])) {
-                $data = $user;         
-                //  $this->History->create();
-                //  $this->History->save(array('user_id' => $user['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'login'));                     
-            }     */
-            
-            $user = array(
-              'User' => array('id' => $this->_getParam('uid'))
-            );
-            
-            if ($this->_getParam('secret') == md5('tdk-login-return'.$user['User']['id'])) {
-                $data = $user; 
-            }
+        if ($this->_getParam('gameId') && 
+        $this->_getParam('channelId') && 
+        $this->_getParam('secret') && 
+        $this->_getParam('uid') && 
+        ($this->_getParam('secret') == md5('tdk-login-return'.$this->_getParam('uid')))
+        ) {
+            $data = array(
+                'User' => array('id' => $this->_getParam('uid'))
+            ); 
         }
-
         $this->set(array(
             'user' => $data,
             '_serialize' => array('user')
