@@ -176,7 +176,7 @@ class UsersController extends AppController {
             $options['conditions']['User.created < '] = $this->params->query['end_date'];
         }
         if (!empty($this->params->query['search'])) {
-            $options['conditions']['User.username LIKE '] = '"%'.$this->params->query['search']. '%"';
+            $options['conditions']['User.username'] = $this->params->query['search'];
         }
 
 
