@@ -224,6 +224,8 @@ class UsersController extends AppController {
         $options['order'] = array('User.created DESC');   
 
         $users = $this->User->find('all', $options);
+        
+        $this->log($options);
 
         if ($users && (in_array($user['User']['role'], array('game', 'channel')))) {
             foreach ($users as &$row) {              
