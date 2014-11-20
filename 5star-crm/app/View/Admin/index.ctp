@@ -103,7 +103,7 @@
 					<li style="cursor: pointer;" ng-show="permission == 'admin'"><a ng-click="g.prepareAddGame()"><img src="<?php echo $this->Html->imageUrl('ico_page_64.png') ?>" class="icon" alt="" /><span class="text">Tạo Game mới</span></a></li>
                     
                     
-					<li style="cursor: pointer;"><a ng-click="workingPart = 'paymentList'"><img src="<?php echo $this->Html->imageUrl('ico_picture_64.png') ?>" class="icon" alt="" /><span class="text">Lịch sử nạp tiền</span></a></li>                        
+					<li style="cursor: pointer;" ng-show="permission != 'user'"><a ng-click="workingPart = 'paymentList'"><img src="<?php echo $this->Html->imageUrl('ico_picture_64.png') ?>" class="icon" alt="" /><span class="text">Lịch sử nạp tiền</span></a></li>                        
 					<li style="cursor: pointer;"><a ng-click="workingPart = 'userList'"><img src="<?php echo $this->Html->imageUrl('ico_users_64.png') ?>" class="icon" alt="" /><span class="text">Danh sách thành viên</span></a></li>
 					<li style="cursor: pointer;"><a ng-click="workingPart = 'chart'"><img src="<?php echo $this->Html->imageUrl('ico_chat_64.png') ?>" class="icon" alt="" /><span class="text">Thống kê</span></a></li>
 				</ul>
