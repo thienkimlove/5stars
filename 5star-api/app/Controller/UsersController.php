@@ -224,12 +224,12 @@ class UsersController extends AppController {
         $options['order'] = array('User.created DESC');   
 
         $users = $this->User->find('all', $options);
+        
+        $this->log($user);
 
-        if ($users) {
-            foreach ($users as &$row) {
-               if (in_array($user['User']['role'], array('game', 'channel'))) {
-                   $row['User']['email'] = $this->_hideEmail($row['User']['email']);
-               }
+        if ($users && (in_array($user['User']['role'], array('game', 'channel')))) {
+            foreach ($users as &$row) {              
+                $row['User']['email'] = $this->_hideEmail($row['User']['email']);
             }
         }
 
