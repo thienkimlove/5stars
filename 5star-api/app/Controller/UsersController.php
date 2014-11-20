@@ -176,7 +176,7 @@ class UsersController extends AppController {
             $options['conditions']['User.created < '] = $this->params->query['end_date'];
         }
         if (!empty($this->params->query['search'])) {
-            $options['conditions']['User.username LIKE '] = '%'.$this->params->query['search']. '%';
+            $options['conditions']['User.username LIKE '] = '"%'.$this->params->query['search']. '%"';
         }
 
 
@@ -225,7 +225,7 @@ class UsersController extends AppController {
 
         $users = $this->User->find('all', $options);
         
-        $this->log($options);
+        //$this->log($options);
 
         if ($users && (in_array($user['User']['role'], array('game', 'channel')))) {
             foreach ($users as &$row) {              
