@@ -58,7 +58,7 @@
 			</li>
 			
 
-			<li ng-class="{'active' : workingPart == 'paymentList'}"><a href="javascript:void(0)">Thanh toán</a>
+			<li ng-show="permission" ng-class="{'active' : workingPart == 'paymentList'}"><a href="javascript:void(0)">Thanh toán</a>
 				<ul>
 					<li style="cursor: pointer;" ng-class="{'active' : workingPart == 'paymentList'}"><a ng-click="workingPart = 'paymentList'">Lịch sử thanh toán</a></li> 
 
@@ -72,7 +72,7 @@
 				</ul>
 			</li>
 			
-			<li ng-class="{'active' : workingPart == 'chart'}"><a href="javascript:void(0)">Biểu mẫu thống kê</a>
+			<li ng-show="permission" ng-class="{'active' : workingPart == 'chart'}"><a href="javascript:void(0)">Biểu mẫu thống kê</a>
 				<ul>
 					<li style="cursor: pointer;" ng-class="{'active' : workingPart == 'chart'}"><a ng-click="workingPart = 'chart'">Lịch sử đăng nhập</a></li> 
 
