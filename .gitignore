@@ -1,0 +1,14 @@
+/5star-api/app/Config/database.php
+/5star-api/app/Config/5star.php
+/5star-api/app/Config/email.php
+
+/5star-api/app/tmp/*
+
+
+/5star-wap/app/Config/email.php
+/5star-wap/app/Config/site.php
+/5star-wap/app/tmp/*
+
+/5star-crm/app/Config/site.php
+
+/5star-crm/app/tmp/*

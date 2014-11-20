@@ -1,2 +1,0 @@
-1415951058
-a:2:{s:4:"name";a:5:{s:32:"e7aff7301be0cb35c1118210d97726e9";s:16:"`api_game_local`";s:32:"47eb7bb09414c64f779510914712b6ee";s:7:"`count`";s:32:"fdfa160da0fb3b252eba6276bff48759";s:7:"`games`";s:32:"f03fb6fdbbae782989f4587a120ed6e2";s:11:"`Game`.`id`";s:32:"15e7972cb3e0824a42dbe15f2b0c8414";s:6:"`Game`";}s:6:"fields";a:1:{s:32:"219c8abf07ad4784ae11098c0852ff27";a:1:{i:0;s:19:"COUNT(*) AS `count`";}}}
