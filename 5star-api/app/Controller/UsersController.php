@@ -323,9 +323,7 @@ class UsersController extends AppController {
             throw new BadRequestException('Khong tim thay thanh vien voi email ' . $this->_getParam('email'));
         }
         $user['User']['password'] = substr(base64_encode(md5(microtime())),-9,-1);
-        if(!$this->User->save($user)) {
-            throw new BadRequestException('Khong reset duoc mat khau');   
-        }
+
         try  {
             $email = new CakeEmail('stars');                       
             $email->template('request_password')
@@ -335,14 +333,22 @@ class UsersController extends AppController {
             //->bcc(array('manhquan@5stars.vn'))
             ->subject('Mật khẩu tài khoản của bạn tại 5Stars đã được reset')
             ->viewVars(array('new_pass' => $user['User']['password']))
-            ->send();
-            $status = true;   
+            ->send(); 
+            $status = true;
         } catch (Exception $e) {
             $status = false;
         }
 
+        if (!$status) {
+            throw new BadRequestException('Khong gui duoc email');
+        } else {
+            if(!$this->User->save($user)) {
+                throw new BadRequestException('Khong reset duoc mat khau');   
+            }
+        }
+
         $this->set(array(
-            'status' => $status,
+            'status' => true,
             '_serialize' => array('status')
         ));
     }
