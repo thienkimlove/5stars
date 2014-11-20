@@ -11,7 +11,7 @@ class Resource {
 
 	public function __construct($name, $user = null, $password = null) {
 		$this->_resource = $name;
-		$this->_socket = new HttpSocket(array('ssl_verify_peer' => false));
+		$this->_socket = new HttpSocket(array('ssl_verify_peer' => false, 'timeout' => 200));
 
 		if(isset($user) && isset($password)) {
 			$this->_socket->configAuth('Basic', $user, $password);
