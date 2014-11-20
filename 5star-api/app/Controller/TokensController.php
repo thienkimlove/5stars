@@ -28,7 +28,7 @@
             $history = $this->request->data;            
             $history['time'] = date('Y-m-d H:i:s');
             $history['infos'] = json_encode($this->request->data);            
-            $this->History->addHistory($history);
+            $this->addHistory($history);
 			$this->set(array(
 				'token' => $token,                   
 				'_serialize' => array('token')
