@@ -224,7 +224,7 @@ class UsersController extends AppController {
         $options['order'] = array('User.created DESC');   
 
         $users = $this->User->find('all', $options);
-        
+
         if ($users && (in_array($user['User']['role'], array('game', 'channel')))) {
             foreach ($users as &$row) {              
                 $row['User']['email'] = $this->_hideEmail($row['User']['email']);
@@ -326,18 +326,23 @@ class UsersController extends AppController {
         if(!$this->User->save($user)) {
             throw new BadRequestException('Khong reset duoc mat khau');   
         }
-        $email = new CakeEmail('stars');                       
-        $email->template('request_password')
-        ->emailFormat('both')
-        ->from(array('redmine@5stars.vn' => '5Stars'))
-        ->to($user['User']['email'])
-        //->bcc(array('manhquan@5stars.vn'))
-        ->subject('Mật khẩu tài khoản của bạn tại 5Stars đã được reset')
-        ->viewVars(array('new_pass' => $user['User']['password']))
-        ->send();
+        try  {
+            $email = new CakeEmail('stars');                       
+            $email->template('request_password')
+            ->emailFormat('both')
+            ->from(array('redmine@5stars.vn' => '5Stars'))
+            ->to($user['User']['email'])
+            //->bcc(array('manhquan@5stars.vn'))
+            ->subject('Mật khẩu tài khoản của bạn tại 5Stars đã được reset')
+            ->viewVars(array('new_pass' => $user['User']['password']))
+            ->send();
+            $status = true;   
+        } catch (Exception $e) {
+            $status = false;
+        }
 
         $this->set(array(
-            'status' => true,
+            'status' => $status,
             '_serialize' => array('status')
         ));
     }

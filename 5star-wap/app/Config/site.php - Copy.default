@@ -1,0 +1,12 @@
+<?php
+$config = array(
+		'debug' => 2, 
+		'fbId' => '570185759714294',  
+        'fbSecret' => '696b2f1b79526e93c708762766bc98ad',        
+		 'Api' => array(
+			'scheme' => 'http',
+			'host' => 'localhost',
+			'path' => '/trunk/5star-api/'    
+		 ),
+		 'wap' => 'http://localhost/trunk/5star-wap'           
+);
