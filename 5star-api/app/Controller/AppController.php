@@ -124,14 +124,19 @@ class AppController extends Controller {
 
     public function addHistory($postData) {
         $history = (isset($postData['History']))? $postData['History'] : $postData;
+        $history['time'] = date('Y-m-d H:i:s');
         $this->History->recursive = -1;
-        $this->History->deleteAll(array( 
+
+        $exist = $this->History->find('count', array('conditions' => array(
             'History.user_id' => $postData['user_id'],
             'History.game_id' => $postData['game_id'],
             'History.channel_id' => $postData['channel_id']  
-            ), false);
-        $this->History->create();    
-        $this->History->save($history);
+        )));
+        if ($exist == 0) {            
+            $this->History->create();    
+            $this->History->save($history);   
+        }
+
     }
 
     public function errorException($validationErrors) {
