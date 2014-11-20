@@ -227,7 +227,9 @@ class UsersController extends AppController {
 
         if ($users) {
             foreach ($users as &$row) {
-                $row['User']['email'] = $this->_hideEmail($row['User']['email']);
+               if (in_array($user['User']['role'], array('game', 'channel'))) {
+                   $row['User']['email'] = $this->_hideEmail($row['User']['email']);
+               }
             }
         }
 

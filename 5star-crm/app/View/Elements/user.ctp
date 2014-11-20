@@ -67,7 +67,7 @@
                         <td ng-bind="user.User.created | timeAgo"></td>
                         <td ng-bind="user.User.status"></td>
                         <td>
-                            <a style="cursor: pointer;" ng-show="permission == 'admin' || permission == 'user'" ng-click="u.editUser(user)"><img src="<?php echo $this->Html->imageUrl('ico_edit_16.png') ?>" class="icon16 fl-space2" alt="" title="edit" /></a>
+                            <a style="cursor: pointer;" ng-show="permission == 'admin'" ng-click="u.editUser(user)"><img src="<?php echo $this->Html->imageUrl('ico_edit_16.png') ?>" class="icon16 fl-space2" alt="" title="edit" /></a>
                             <a href="#" style="cursor: pointer;display:none"><img src="<?php echo $this->Html->imageUrl('ico_delete_16.png') ?>" class="icon16 fl-space2" alt="" title="delete" /></a>
                             <a href="#" style="cursor: pointer;display:none"><img src="<?php echo $this->Html->imageUrl('ico_settings_16.png') ?>" class="icon16 fl-space2" alt="" title="settings" /></a>
                         </td>
