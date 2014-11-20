@@ -183,20 +183,20 @@ class UsersController extends AppController {
         $options['joins'] = array(
             array( 
                 'table' => 'histories',
-                'type' => 'LEFT',
+                'type' => 'INNER',
                 'alias' => 'History',
                 'conditions' => array('User.id = History.user_id'), 
                 'limit' => 1                       
             ),
             array( 
                 'table' => 'channels',
-                'type' => 'LEFT',
+                'type' => 'INNER',
                 'alias' => 'Channel',
                 'conditions' => array('History.channel_id = Channel.id'),                        
             ),                    
             array(
                 'table' => 'games',
-                'type' => 'LEFT',
+                'type' => 'INNER',
                 'alias' => 'Game',
                 'conditions' => array('History.game_id = Game.id'),                        
             ),
