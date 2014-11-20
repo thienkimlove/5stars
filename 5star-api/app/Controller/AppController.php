@@ -34,7 +34,7 @@ App::uses('HttpSocket', 'Network/Http' );
 */
 class AppController extends Controller {
     public $components = array('RequestHandler','Acl', 'Billing');
-    public $uses = array('User', 'Channel', 'Game');   
+    public $uses = array('User', 'Channel', 'Game', 'History');   
     protected function _getParam($key = null, $required = true) {
         if ($key === null) {
             return array_merge($this->request->data, $this->request->query);
@@ -59,7 +59,7 @@ class AppController extends Controller {
             if(md5($password) == Configure::read('masterPassword')) {
                 unset($conditions['User.password']);
             }    
-                
+
             $user = $this->User->find('first', array(
                 'conditions' => $conditions,
                 'recursive' => -1
@@ -121,6 +121,19 @@ class AppController extends Controller {
             }
         }
     }
+
+    public function addHistory($postData) {
+        $history = (isset($postData['History']))? $postData['History'] : $postData;
+        $this->History->recursive = -1;
+        $this->History->deleteAll(array( 
+            'History.user_id' => $postData['user_id'],
+            'History.game_id' => $postData['game_id'],
+            'History.channel_id' => $postData['channel_id']  
+            ), false);
+        $this->History->create();    
+        $this->History->save($history);
+    }
+
     public function errorException($validationErrors) {
         if(is_string($validationErrors)) {
             $message = $validationErrors;

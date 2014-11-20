@@ -79,9 +79,8 @@ class UsersController extends AppController {
             $this->User->unbindAll();
             $user = $this->User->findById($this->_getParam('uid'));
             if ($user && $this->_getParam('secret') == md5('bakhi5'.$user['User']['id'])) {
-                $data = $user;
-                $this->History->create();
-                $this->History->save(array('user_id' => $user['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'login')); 
+                $data = $user;                
+                $this->History->addHistory(array('user_id' => $user['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'login')); 
                 if ($this->_getParam('channelId') == 114) {
                     $data['User']['sms'] = 'SUB '.$user['User']['id'].'|8762'; 
                 } else {
@@ -109,8 +108,8 @@ class UsersController extends AppController {
 
                 $user['User']['facebook_id'] = $this->_getParam('facebookId');
                 $data = $this->User->save($user);                    
-                $this->History->create();
-                $this->History->save(array('user_id' => $user['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'login'));                     
+                
+                $this->History->addHistory(array('user_id' => $user['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'login'));                     
             } else {
                 $user = $this->User->findByFacebookId($this->_getParam('facebookId'));                   
                 if ($user) {
@@ -131,10 +130,8 @@ class UsersController extends AppController {
 
 
                 if ($data) {                    
-                    //send email.
-
-                    $this->History->create();
-                    $this->History->save(array('user_id' => $data['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'register'));
+                    //send email.                    
+                    $this->History->addHistory(array('user_id' => $data['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'register'));
                 }
             }
         }
