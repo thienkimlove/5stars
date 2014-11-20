@@ -108,7 +108,7 @@ class UsersController extends AppController {
 
                 $user['User']['facebook_id'] = $this->_getParam('facebookId');
                 $data = $this->User->save($user);                    
-                
+
                 $this->addHistory(array('user_id' => $user['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'login'));                     
             } else {
                 $user = $this->User->findByFacebookId($this->_getParam('facebookId'));                   
@@ -173,7 +173,10 @@ class UsersController extends AppController {
             $options['conditions']['User.created < '] = $this->params->query['end_date'];
         }
         if (!empty($this->params->query['search'])) {
-            $options['conditions']['User.username'] = $this->params->query['search'];
+            $options['conditions'][] = array('OR' => array(
+                array('User.username LIKE' => '%'.$this->params->query['search'].'%'),
+                array('User.email LIKE' => '%'.$this->params->query['search'].'%')
+            ));
         }
 
 
@@ -221,7 +224,7 @@ class UsersController extends AppController {
         $options['order'] = array('User.created DESC');   
 
         $users = $this->User->find('all', $options);
-        
+
         //$this->log($options);
 
         if ($users && (in_array($user['User']['role'], array('game', 'channel')))) {
