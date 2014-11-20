@@ -58,21 +58,21 @@
 			</li>
 			
 
-			<li ng-show="permission" ng-class="{'active' : workingPart == 'paymentList'}"><a href="javascript:void(0)">Thanh toán</a>
+			<li ng-show="permission != 'user'" ng-class="{'active' : workingPart == 'paymentList'}"><a href="javascript:void(0)">Thanh toán</a>
 				<ul>
 					<li style="cursor: pointer;" ng-class="{'active' : workingPart == 'paymentList'}"><a ng-click="workingPart = 'paymentList'">Lịch sử thanh toán</a></li> 
 
 				</ul>
 			</li>
 			
-			<li ng-class="{'active' : workingPart == 'userList'}"><a href="javascript:void(0)">Thành viên</a>
+			<li  ng-class="{'active' : workingPart == 'userList'}"><a href="javascript:void(0)">Thành viên</a>
 				<ul>
 					<li style="cursor: pointer;" ng-class="{'active' : workingPart == 'userList'}"><a ng-click="workingPart = 'userList'">Danh sách thành viên</a></li> 
 
 				</ul>
 			</li>
 			
-			<li ng-show="permission" ng-class="{'active' : workingPart == 'chart'}"><a href="javascript:void(0)">Biểu mẫu thống kê</a>
+			<li ng-show="permission != 'user'" ng-class="{'active' : workingPart == 'chart'}"><a href="javascript:void(0)">Biểu mẫu thống kê</a>
 				<ul>
 					<li style="cursor: pointer;" ng-class="{'active' : workingPart == 'chart'}"><a ng-click="workingPart = 'chart'">Lịch sử đăng nhập</a></li> 
 
