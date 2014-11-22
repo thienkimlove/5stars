@@ -178,27 +178,30 @@ class UsersController extends AppController {
                 array('User.email LIKE' => '%'.$this->params->query['search'].'%')
             ));
         }
-        $options['joins'] = array(
-            array( 
-                'table' => 'histories',
-                'type' => 'INNER',
-                'alias' => 'History',
-                'conditions' => array('User.id = History.user_id'), 
-                'limit' => 1                       
-            ),
-            array( 
-                'table' => 'channels',
-                'type' => 'INNER',
-                'alias' => 'Channel',
-                'conditions' => array('History.channel_id = Channel.id'),                        
-            ),                    
-            array(
-                'table' => 'games',
-                'type' => 'INNER',
-                'alias' => 'Game',
-                'conditions' => array('History.game_id = Game.id'),                        
-            ),
-        );
+        if ($user['User']['role'] == 'channel' || !empty($this->params->query['channel_id']) || $user['User']['role'] == 'game' || !empty($this->params->query['game_id'])) {
+            $options['joins'] = array(
+                array( 
+                    'table' => 'histories',
+                    'type' => 'INNER',
+                    'alias' => 'History',
+                    'conditions' => array('User.id = History.user_id'), 
+                    'limit' => 1                       
+                ),
+                array( 
+                    'table' => 'channels',
+                    'type' => 'INNER',
+                    'alias' => 'Channel',
+                    'conditions' => array('History.channel_id = Channel.id'),                        
+                ),                    
+                array(
+                    'table' => 'games',
+                    'type' => 'INNER',
+                    'alias' => 'Game',
+                    'conditions' => array('History.game_id = Game.id'),                        
+                ),
+            ); 
+            $options['group'] = 'User.id';
+        }
 
         if ($user['User']['role'] == 'channel') {                    
             $options['conditions']['Channel.user_id = '] =  $user['User']['id'];                
@@ -213,11 +216,8 @@ class UsersController extends AppController {
         if (!empty($this->params->query['game_id'])) {
             $options['conditions']['History.game_id = '] =  $this->params->query['game_id'];
         }           
-
-
-        $options['group'] = 'User.id';
         
-        $summary =  $this->User->find('count');
+        $summary =  $this->User->find('count', $options);
        
         $options['limit'] = (!empty($this->params->query['limit']))? (int) $this->params->query['limit'] : 20; 
         $options['order'] = array('User.created DESC');   
