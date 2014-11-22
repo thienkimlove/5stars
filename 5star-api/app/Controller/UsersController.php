@@ -180,7 +180,8 @@ class UsersController extends AppController {
         }
 
 
-        $options['joins'] = array(
+        if (!in_array($user['User']['role'], array('game','channel'))) {
+            $options['joins'] = array(
             array( 
                 'table' => 'histories',
                 'type' => 'INNER',
@@ -201,6 +202,7 @@ class UsersController extends AppController {
                 'conditions' => array('History.game_id = Game.id'),                        
             ),
         );
+        }
 
         if ($user['User']['role'] == 'channel') {                    
             $options['conditions']['Channel.user_id = '] =  $user['User']['id'];                
