@@ -165,7 +165,7 @@ class UsersController extends AppController {
         $this->User->recursive = -1;          
         // $options = $this->Payment->buildOptions($this->params->query);
         $options = array();
-
+                             
         if (!empty($this->params->query['start_date'])) {
             $options['conditions']['User.created > '] = $this->params->query['start_date'];
         }
@@ -216,6 +216,8 @@ class UsersController extends AppController {
 
 
         $options['group'] = 'User.id';
+        
+        $summary =  $this->User->find('count');
        
         $options['limit'] = (!empty($this->params->query['limit']))? (int) $this->params->query['limit'] : 20; 
         $options['order'] = array('User.created DESC');   
@@ -228,10 +230,7 @@ class UsersController extends AppController {
         if ($users && (in_array($user['User']['role'], array('game', 'channel')))) {
             foreach ($users as &$row) {              
                 $row['User']['email'] = $this->_hideEmail($row['User']['email']);
-            }
-            $summary =  $this->User->find('count', $options);
-        } else {
-            $summary =  $this->User->find('count');
+            }           
         }
 
         $this->set(array(
