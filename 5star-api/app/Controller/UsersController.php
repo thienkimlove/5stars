@@ -216,8 +216,7 @@ class UsersController extends AppController {
 
 
         $options['group'] = 'User.id';
-        $summary =  $this->User->find('count', $options);
-
+       
         $options['limit'] = (!empty($this->params->query['limit']))? (int) $this->params->query['limit'] : 20; 
         $options['order'] = array('User.created DESC');   
 
@@ -225,10 +224,14 @@ class UsersController extends AppController {
 
         //$this->log($options);
 
+        
         if ($users && (in_array($user['User']['role'], array('game', 'channel')))) {
             foreach ($users as &$row) {              
                 $row['User']['email'] = $this->_hideEmail($row['User']['email']);
             }
+            $summary =  $this->User->find('count', $options);
+        } else {
+            $summary =  $this->User->find('count');
         }
 
         $this->set(array(
