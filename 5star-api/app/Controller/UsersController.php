@@ -178,10 +178,7 @@ class UsersController extends AppController {
                 array('User.email LIKE' => '%'.$this->params->query['search'].'%')
             ));
         }
-
-
-        if (!in_array($user['User']['role'], array('game','channel'))) {
-            $options['joins'] = array(
+        $options['joins'] = array(
             array( 
                 'table' => 'histories',
                 'type' => 'INNER',
@@ -202,7 +199,6 @@ class UsersController extends AppController {
                 'conditions' => array('History.game_id = Game.id'),                        
             ),
         );
-        }
 
         if ($user['User']['role'] == 'channel') {                    
             $options['conditions']['Channel.user_id = '] =  $user['User']['id'];                

@@ -283,6 +283,9 @@ filter('dot', function(){
 
 
 angular.module('star.services', []).
+config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.timeout = 50000;
+}]).
 factory('fdbModel', function($http, $q) {
     return function(modelName) {
         modelName = modelName.toUnderscore();
