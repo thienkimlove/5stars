@@ -1,5 +1,2 @@
 <?php
   $config['debug'] = 2;
-  $config['masterPassword'] = md5('8thang3');
-  
-?>
