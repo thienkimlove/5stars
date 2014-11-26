@@ -36,7 +36,11 @@
 
                 <option value="9">Ngũ Đài Sơn</option>
                 <option value="10">Cửu Hoa Sơn</option>
-                </select>
+                <option value="11">Nga Mi Sơn</option>
+                <option value="12">Bình Đỉnh Sơn</option>
+                <option value="13">Sư Đà Lĩnh</option>
+                <option value="14">Bạch Cốt Lĩnh</option>
+            </select>
             <p>B3:</p>
             <a id="btn-code">get code</a>
         </div>
