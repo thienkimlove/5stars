@@ -1,7 +1,7 @@
 <?php
 class TokensReportsController extends AppController
 {
-    public $uses = array('History');
+    public $uses = array('Report');
 
     public function index()
     {
@@ -15,7 +15,7 @@ class TokensReportsController extends AppController
             $day0 = date('Y-m-d', strtotime($this->request->query('day1Token')) - (24 * 60 * 60));
             $day1 = date('Y-m-d', strtotime($this->request->query('day1Token')));
             $day2 = date('Y-m-d', strtotime($this->request->query('day2Token')));
-            $conditions = array('History.time BETWEEN ? AND ?' => array(
+            $conditions = array('Report.time BETWEEN ? AND ?' => array(
                 $day1, $day2));
         }
         if ($this->request->query('channel_id')) {
@@ -26,7 +26,7 @@ class TokensReportsController extends AppController
         }
         $group = array();
         if ($this->request->query('group')) {
-            $group = array('History.user_id');
+            $group = array('Report.user_id');
         }
         if ($this->request->query('action')) {
             if ($this->request->query('action') == "register") {
@@ -36,7 +36,7 @@ class TokensReportsController extends AppController
             }
         }
         // $this->paginate= array('History'=> array('limit'=>20,'order'=>'History.id','recursive'=>-1,'conditions'=>$conditions,'group'=>$group));
-        $count = $this->History->find('count', array('recursive' => -1, 'conditions' => $conditions, 'group' => $group));
+        $count = $this->Report->find('count', array('recursive' => -1, 'conditions' => $conditions, 'group' => $group));
         if ($this->request->query('game_id')) {
             $conditions['game_id'] = $this->request->query('game_id');
             if ($this->request->query('game_id') == 3 || $this->request->query('game_id') == 5) {
@@ -44,7 +44,7 @@ class TokensReportsController extends AppController
             }
         }
 
-        $total = $this->History->find('count', array('recursive' => -1, 'conditions' => $conditions, 'group' => $group));
+        $total = $this->Report->find('count', array('recursive' => -1, 'conditions' => $conditions, 'group' => $group));
         $this->set(array('histories' => array(), 'count' => $count, 'total' => $total, '_serialize' => array('histories', 'count', 'total')));
     }
 
@@ -80,7 +80,7 @@ class TokensReportsController extends AppController
 
             }
 
-            $a1 = $this->History->query($subQuery);
+            $a1 = $this->Report->query($subQuery);
         }
         $this->set(array('A1' => $a1[0], '_serialize' => array('A1')));
     }
@@ -93,39 +93,39 @@ class TokensReportsController extends AppController
         }
         $options = array();
         if (!empty($this->request->query['start_date'])) {
-            $options['conditions']['History.time > '] = $this->request->query['start_date'];
+            $options['conditions']['Report.time > '] = $this->request->query['start_date'];
         }
 
         if (!empty($this->request->query['end_date'])) {
-            $options['conditions']['History.time < '] = $this->request->query['end_date'];
+            $options['conditions']['Report.time < '] = $this->request->query['end_date'];
         }
 
         if (!empty($this->request->query['channel_id'])) {
-            $options['conditions']['History.channel_id'] = $this->request->query('channel_id');
+            $options['conditions']['Report.channel_id'] = $this->request->query('channel_id');
         }
         if (!empty($this->request->query['game_id'])) {
             if ($this->request->query('game_id') == '4') {
-                $options['conditions']['History.game_id'] = array('3', '5');
+                $options['conditions']['Report.game_id'] = array('3', '5');
             } else {
-                $options['conditions']['History.game_id'] = $this->request->query['game_id'];
+                $options['conditions']['Report.game_id'] = $this->request->query['game_id'];
             }
         }
 
         if (!empty($this->request->query['action'])) {
             if ($this->request->query('action') == "register") {
-                $options['conditions']['History.action'] = 'register';
+                $options['conditions']['Report.action'] = 'register';
             } else if ($this->request->query('action') == "login") {
-                $options['conditions']['History.action'] = array('login', 'relogin');
+                $options['conditions']['Report.action'] = array('login', 'relogin');
             }
         }
-        $options['group'] = 'DATE(History.time)';
-        $this->History->virtualFields = array(
-            'total_unique_id' => 'Count(DISTINCT History.user_id)',
-            'day' => 'DATE(History.time)'
+        $options['group'] = 'DATE(Report.time)';
+        $this->Report->virtualFields = array(
+            'total_unique_id' => 'Count(DISTINCT Report.user_id)',
+            'day' => 'DATE(Report.time)'
         );
         $options['fields'] = array('total_unique_id', 'day');
         $options['recursive']=-1;
-        $histories = $this->History->find('all', $options);
+        $histories = $this->Report->find('all', $options);
         $this->set(array('histories' => $histories, '_serialize' => array('histories')));
     }
 
@@ -137,27 +137,27 @@ class TokensReportsController extends AppController
         }
         $options = array();
         if (!empty($this->request->query['start_date'])) {
-            $options['conditions']['History.time > '] = $this->request->query['start_date'];
+            $options['conditions']['Report.time > '] = $this->request->query['start_date'];
         }
 
         if (!empty($this->request->query['end_date'])) {
-            $options['conditions']['History.time < '] = $this->request->query['end_date'];
+            $options['conditions']['Report.time < '] = $this->request->query['end_date'];
         }
 
         if (!empty($this->request->query['channel_id'])) {
-            $options['conditions']['History.channel_id'] = $this->request->query('channel_id');
+            $options['conditions']['Report.channel_id'] = $this->request->query('channel_id');
         }
         if (!empty($this->request->query['game_id'])) {
             if ($this->request->query('game_id') == '4') {
-                $options['conditions']['History.game_id'] = array('3', '5');
+                $options['conditions']['Report.game_id'] = array('3', '5');
             } else {
-                $options['conditions']['History.game_id'] = $this->request->query['game_id'];
+                $options['conditions']['Report.game_id'] = $this->request->query['game_id'];
             }
         }
         $options['group'] = 'user_id';
         $options['recursive']=-1;
         $options['fields'] = array('user_id');
-        $histories = $this->History->find('all', $options);
+        $histories = $this->Report->find('all', $options);
         $this->set(array('histories' => $histories, '_serialize' => array('histories')));
     }
 }
