@@ -26,8 +26,7 @@
 				throw new BadRequestException($this->errorException($this->Token->validationErrors));
 			}
             $history = $this->request->data;            
-            $history['time'] = date('Y-m-d H:i:s');
-            //$history['infos'] = json_encode($this->request->data);            
+                                   
             $this->addHistory($history);
 			$this->set(array(
 				'token' => $token,                   

@@ -80,7 +80,12 @@ class UsersController extends AppController {
             $user = $this->User->findById($this->_getParam('uid'));
             if ($user && $this->_getParam('secret') == md5('bakhi5'.$user['User']['id'])) {
                 $data = $user;                
-                $this->addHistory(array('user_id' => $user['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'login')); 
+                $this->addHistory(array(
+                    'user_id' => $user['User']['id'],
+                    'channel_id' => $this->_getParam('channelId'),
+                    'game_id' => $this->_getParam('gameId'),
+                    'action' => 'login'
+                )); 
                 if ($this->_getParam('channelId') == 114) {
                     $data['User']['sms'] = 'SUB '.$user['User']['id'].'|8762'; 
                 } else {
@@ -109,7 +114,12 @@ class UsersController extends AppController {
                 $user['User']['facebook_id'] = $this->_getParam('facebookId');
                 $data = $this->User->save($user);                    
 
-                $this->addHistory(array('user_id' => $user['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'login'));                     
+                $this->addHistory(array(
+                    'user_id' => $user['User']['id'],
+                    'channel_id' => $this->_getParam('channelId'), 
+                    'game_id' => $this->_getParam('gameId'),
+                    'action' => 'login'
+                ));                     
             } else {
                 $user = $this->User->findByFacebookId($this->_getParam('facebookId'));                   
                 if ($user) {
@@ -131,7 +141,12 @@ class UsersController extends AppController {
 
                 if ($data) {                    
                     //send email.                    
-                    $this->addHistory(array('user_id' => $data['User']['id'], 'channel_id' => $this->_getParam('channelId'), 'game_id' => $this->_getParam('gameId'),'action' => 'register'));
+                    $this->addHistory(array(
+                        'user_id' => $data['User']['id'],
+                        'channel_id' => $this->_getParam('channelId'), 
+                        'game_id' => $this->_getParam('gameId'),
+                        'action' => 'register'
+                    ));
                 }
             }
         }
@@ -165,7 +180,7 @@ class UsersController extends AppController {
         $this->User->recursive = -1;          
         // $options = $this->Payment->buildOptions($this->params->query);
         $options = array();
-                             
+
         if (!empty($this->params->query['start_date'])) {
             $options['conditions']['User.created > '] = $this->params->query['start_date'];
         }
@@ -216,9 +231,9 @@ class UsersController extends AppController {
         if (!empty($this->params->query['game_id'])) {
             $options['conditions']['History.game_id = '] =  $this->params->query['game_id'];
         }           
-        
+
         $summary =  $this->User->find('count', $options);
-       
+
         $options['limit'] = (!empty($this->params->query['limit']))? (int) $this->params->query['limit'] : 20; 
         $options['order'] = array('User.created DESC');   
 
@@ -226,7 +241,7 @@ class UsersController extends AppController {
 
         //$this->log($options);
 
-        
+
         if ($users && (in_array($user['User']['role'], array('game', 'channel')))) {
             foreach ($users as &$row) {              
                 $row['User']['email'] = $this->_hideEmail($row['User']['email']);

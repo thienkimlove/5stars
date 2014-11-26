@@ -94,11 +94,6 @@ class AppSchema extends CakeSchema {
 		'user_id' => array('type' => 'integer', 'null' => true, 'default' => null),
 		'channel_id' => array('type' => 'integer', 'null' => true, 'default' => null),
 		'game_id' => array('type' => 'integer', 'null' => true, 'default' => null),
-		'sub_id' => array('type' => 'integer', 'null' => true, 'default' => null),
-		'server_id' => array('type' => 'integer', 'null' => true, 'default' => null),
-		'action' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'time' => array('type' => 'datetime', 'null' => true, 'default' => null),
-		'infos' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -155,6 +150,21 @@ class AppSchema extends CakeSchema {
 		'game_billing_response' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'payment_code' => array('type' => 'integer', 'null' => true, 'default' => null),
 		'payment_message' => array('type' => 'text', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
+	);
+
+	public $reports = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
+		'user_id' => array('type' => 'integer', 'null' => true, 'default' => null),
+		'channel_id' => array('type' => 'integer', 'null' => true, 'default' => null),
+		'game_id' => array('type' => 'integer', 'null' => true, 'default' => null),
+		'sub_id' => array('type' => 'integer', 'null' => true, 'default' => null),
+		'server_id' => array('type' => 'integer', 'null' => true, 'default' => null),
+		'action' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'time' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),

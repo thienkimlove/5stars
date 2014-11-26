@@ -34,7 +34,7 @@ App::uses('HttpSocket', 'Network/Http' );
 */
 class AppController extends Controller {
     public $components = array('RequestHandler','Acl', 'Billing');
-    public $uses = array('User', 'Channel', 'Game', 'History');   
+    public $uses = array('User', 'Channel', 'Game', 'History', 'Report');   
     protected function _getParam($key = null, $required = true) {
         if ($key === null) {
             return array_merge($this->request->data, $this->request->query);
@@ -124,7 +124,7 @@ class AppController extends Controller {
 
     public function addHistory($postData) {
         $history = (isset($postData['History']))? $postData['History'] : $postData;
-        $history['time'] = date('Y-m-d H:i:s');
+
         $this->History->recursive = -1;
 
         $exist = $this->History->find('count', array('conditions' => array(
@@ -136,7 +136,13 @@ class AppController extends Controller {
             $this->History->create();    
             $this->History->save($history);   
         }
+        //add to Report table.
+        $history['time'] = date('Y-m-d H:i:s');
 
+        $this->Report->recursive = -1;
+        $this->Report->create();    
+        $this->Report->save($history);
+       
     }
 
     public function errorException($validationErrors) {
