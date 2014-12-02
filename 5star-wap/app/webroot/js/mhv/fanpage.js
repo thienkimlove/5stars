@@ -31,7 +31,7 @@ $("#btn-code").on("click", function () {
 });
 function login() {
     s = $("#server").val();
-    (s>0 && s < 15) ? FB.login(function (a) {
+    (s>0 && s < 16) ? FB.login(function (a) {
         a.authResponse ? getCode(a, s) : showPopup("B\u1ea1n vui l\u00f2ng cho \u1ee9ng d\u1ee5ng xin quy\u1ec1n truy c\u1eadp")
     }, {scope: 'email,publish_actions,user_likes',return_scopes: true}) : showPopup("B\u1ea1n vui l\u00f2ng ch\u1ecdn server")
 }
