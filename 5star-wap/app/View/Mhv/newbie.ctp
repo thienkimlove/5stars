@@ -41,6 +41,7 @@
                 <option value="13">Sư Đà Lĩnh</option>
                 <option value="14">Bạch Cốt Lĩnh</option>
                 <option value="15">Bàn Tơ Động</option>
+                <option value="16">Lưu Sa Hà</option>
             </select>
             <p>B3:</p>
             <a id="btn-code">get code</a>
