@@ -5,6 +5,11 @@ class MhvController extends AppController
     public function newbie()
     {
         $this->autoLayout = false;
+        App::uses('HttpSocket', 'Network/Http');
+        $HttpSocket = new HttpSocket();
+        $response = $HttpSocket->get('http://myhauvuong.5stars.vn/files/server.json');
+        $response = json_decode($response->body);
+        $this->set('servers',$response);
     }
 
     //action get code newbie from mhv

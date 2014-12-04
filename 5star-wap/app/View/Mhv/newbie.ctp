@@ -24,24 +24,10 @@
             <p>B1: Like Fanpage</p>
             <div class="fb-like" data-href="https://www.facebook.com/myhauvuongmobile" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
             <p>B2:</p>
-            <select id="server"><option value="0">Chọn server</option>
-                <option value="1">Hoa Quả Sơn</option>
-				<option value="2">Ngũ hành Sơn</option>
-                <option value="3">Hỏa Diệm Sơn</option>
-                <option value="4">Bồng Lai Sơn</option>
-                <option value="5">Doanh Châu Sơn</option>
-                <option value="6">Phương Trượng Sơn</option>
-                <option value="7">Côn Lôn Sơn</option>
-                <option value="8">Bồ Đề Sơn</option>
-
-                <option value="9">Ngũ Đài Sơn</option>
-                <option value="10">Cửu Hoa Sơn</option>
-                <option value="11">Nga Mi Sơn</option>
-                <option value="12">Bình Đỉnh Sơn</option>
-                <option value="13">Sư Đà Lĩnh</option>
-                <option value="14">Bạch Cốt Lĩnh</option>
-                <option value="15">Bàn Tơ Động</option>
-                <option value="16">Lưu Sa Hà</option>
+            <select id="server">
+                <?php foreach($servers as $key=>$val):?>
+                <option value="<?php  echo $key;?>"><?php echo $val;?></option>
+                <?php endforeach;?>
             </select>
             <p>B3:</p>
             <a id="btn-code">get code</a>
