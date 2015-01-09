@@ -115,7 +115,7 @@ class BillingComponent extends Component {
             $res_debug =  $response->body;
             $response = json_decode($response->body);
             $this->Payment->id = $sendPayment['id']; 
-            $this->Payment->saveField('game_billing_response', $string);
+            $this->Payment->saveField('game_billing_response', $game['Game']['billing_url']);
             $status = (int) $response->status;
             if ($status === 0) {
                 $this->Payment->saveField('send_game_status', 1);
@@ -124,7 +124,7 @@ class BillingComponent extends Component {
                 //add to cron.                
                 $this->Payment->saveField('send_game_status', 0);
                 $this->Payment->saveField('cron', null);
-                $this->Payment->saveField('game_billing_response', $res_debug);
+                $this->Payment->saveField('game_billing_response', $game['Game']['billing_url']);
             }
 
             if ($debug == 1) {
