@@ -86,11 +86,13 @@ class BillingComponent extends Component {
     }
 
     public function sendPaymentToGame($payment, $debug = 0) {
-        //waiting for GMo API.
+        //waiting for GMo API. 
+        //test http://118.69.171.45/debug.php http://118.69.171.45/test.txt
+        //set exchange_rate = 1 hardcord in case when add new game we dont set this.
         $sendPayment = $payment['Payment'];
         $this->Game->recursive = -1;            
         $game = $this->Game->findById($sendPayment['game_id']);            
-        $amountSendToGame =  $game['Game']['exchange_rate'] * $sendPayment['amount'] ; 
+        $amountSendToGame =  $sendPayment['amount'] ; 
         $sendPayment['server_id'] = ($sendPayment['server_id'])? $sendPayment['server_id'] : "";
 
         $postData =  array(
@@ -115,7 +117,7 @@ class BillingComponent extends Component {
             $res_debug =  $response->body;
             $response = json_decode($response->body);
             $this->Payment->id = $sendPayment['id']; 
-            $this->Payment->saveField('game_billing_response', $game['Game']['billing_url']);
+            $this->Payment->saveField('game_billing_response', $res_debug);
             $status = (int) $response->status;
             if ($status === 0) {
                 $this->Payment->saveField('send_game_status', 1);
@@ -124,7 +126,7 @@ class BillingComponent extends Component {
                 //add to cron.                
                 $this->Payment->saveField('send_game_status', 0);
                 $this->Payment->saveField('cron', null);
-                $this->Payment->saveField('game_billing_response', $game['Game']['billing_url']);
+                $this->Payment->saveField('game_billing_response', $res_debug);
             }
 
             if ($debug == 1) {
