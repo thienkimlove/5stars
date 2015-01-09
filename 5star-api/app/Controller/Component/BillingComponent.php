@@ -12,7 +12,7 @@ class BillingComponent extends Component {
             //test payment (always pass)            
             case "100":
                 //$params = $this->_payDirectPaymentGateway($params);
-                $params['payment_status'] == 1;
+                $params['payment_status'] = 1;
                 $params['amount'] = 1000;
                 break;
                 //apota main payment.
