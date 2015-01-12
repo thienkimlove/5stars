@@ -201,7 +201,7 @@ class PaymentsController extends AppController {
             'card_serial' => '',
             'card_code' => '',
             'payment_status' => 1,
-            'amount' => $params['amount'],
+            'amount' => (int) $params['amount'],
             'payment_log' => $params['itemId'],
             'payment_code'=> null,
             'payment_message' => null,
