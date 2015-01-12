@@ -184,6 +184,31 @@ class PaymentsController extends AppController {
         );            
         return $endParams;
     }		
+    
+     private function _checkGoogleParams($params) {            
+        if (empty($params['channelId']) || empty($params['gameId']) || empty($params['userId'])  || empty($params['itemId'])) {
+            return;
+        }
+
+        $endParams = array(
+            'demo' => (empty($params['demo']))? 0 : 1,
+            'server_id' => (empty($params['serverId']))? null : $params['serverId'],
+            'sub_id' => (empty($params['subId']))? null : $params['subId'],
+            'user_id' => $params['userId'],
+            'channel_id' => $params['channelId'],
+            'game_id' => $params['gameId'],
+            'card_vendor' => '',
+            'card_serial' => '',
+            'card_code' => '',
+            'payment_status' => 1,
+            'amount' => $params['amount'],
+            'payment_log' => $params['itemId'],
+            'payment_code'=> null,
+            'payment_message' => null,
+            'payment_info' => json_encode($params),               
+        );            
+        return $endParams;
+    }        
 
     private function _checkGiftcodeParams($params) {            
         if (empty($params['channelId']) || empty($params['gameId']) || empty($params['userId']) || empty($params['giftcode'])) {
@@ -258,7 +283,7 @@ class PaymentsController extends AppController {
                 'server_id' => $params['serverId'],
                 'channel_id' => $params['channelId'],
                 'sub_id' => $params['subId'],
-                'amount' => $params['amount'],
+                'amount' => (int) $params['amount'],
                 'send_game_status' => '1',
                 'payment_status' => '1'
             ));	
@@ -278,9 +303,11 @@ class PaymentsController extends AppController {
     public function add(){         
         if (!empty($this->request->data['giftcode']))  {
             $params = $this->_checkGiftcodeParams($this->request->data);
-        } else {
+        } else if (!empty($this->request->data['itemId'])) {
+            $params = $this->_checkGoogleParams($this->request->data);
+        }  else {
             $params = $this->_checkParams($this->request->data);
-        }  			 
+        }			 
         if (!$params) {
             throw new BadRequestException('Không đủ tham số truyền vào hoặc tham số truyền vào không hợp lệ');
         }
@@ -311,6 +338,8 @@ class PaymentsController extends AppController {
             } else {
                 throw new ForbiddenException('Giftcode không tồn tại trong hệ thống hoặc đã được sử dụng');
             }
+        } else if (!empty($this->request->data['itemId'])) {
+             $response = $params;
         } else {
             $response = $this->Billing->processPayment($params);
         }        
