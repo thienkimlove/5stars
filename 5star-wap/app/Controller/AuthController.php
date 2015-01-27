@@ -498,10 +498,10 @@ class AuthController extends AppController {
             $apiParams = $this->request->query; 
             
             //remove it after google processs.
-            /*if ($apiParams['gameId'] == 9 && $apiParams['channelId'] == 1) {
+            if ($apiParams['gameId'] == 9 && $apiParams['channelId'] == 1) {
                 $this->redirect('http://muauto.5stars.vn');
                 return;
-            }  */
+            }  
 
             $scriptInclude = (empty($apiParams['script'])) ? "" : urldecode($apiParams['script']);  
             $token = (empty($apiParams['token'])) ? "" : $apiParams['token'];               
