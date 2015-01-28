@@ -127,10 +127,9 @@ $prefix = 'api2_';
 if (class_exists('Redis')) {
     Cache::config('short', array(
         'engine' => 'Redis',
-        'server' => '118.69.171.45',
+        'server' => 'localhost',
         'port' => 6379,
-        'prefix' => $prefix . '_short_redis_',
-        'password' => 'tieungaoredis',
+        'prefix' => $prefix . '_short_redis_',          
         'duration' => '+1 hours',
         'path' => CACHE,         
     ));
@@ -139,10 +138,9 @@ if (class_exists('Redis')) {
     Cache::config('long', array(
         'engine' => 'Redis',
         'duration' => '+1 week',
-        'server' => '118.69.171.45',
+        'server' => 'localhost',
         'prefix' => $prefix . '_long_redis_',
-        'port' => 6379,
-        'password' => 'tieungaoredis',
+        'port' => 6379,           
         'probability' => 100,
         'path' => CACHE,
     ));
