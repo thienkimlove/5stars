@@ -34,14 +34,15 @@ class BillingComponent extends Component {
 
                 //$params = $this->_abcPaymentGateway($params);
                 //khoa payment hien tai
-               /* if (strtolower($params['card_vendor']) == 'viettel') {
+                if (strtolower($params['card_vendor']) == 'viettel') {
                     $params['card_vendor'] = strtolower($params['card_vendor']);
                     $params = $this->_abcPaymentGateway($params);
                 } else {
                     $params = $this->_vnepayPaymentGateway($params);
-                }      */
+                }     
                 //dung payment cua paydirect 2014-10-17
-                $params = $this->_payDirectPaymentGateway($params);
+                //khoa cong cua paydirect 03-02-2015
+               // $params = $this->_payDirectPaymentGateway($params);
                 
 
                 //send to Tinhvan Log.
