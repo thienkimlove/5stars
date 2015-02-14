@@ -108,7 +108,7 @@ Config.apiMessage = <?php echo (!empty($params['message']))? json_encode($params
 		
 		<div class="control-group" ng-show="!showConfirm">
 			<button type="submit" class="btn btn-success btn-block" id="btn-login" ng-click="onSwitchButton();" ng-bind="btnName"> Đăng Ký</button>	
-            <?php if (!empty($params['gameId']) && !in_array($params['gameId'], array('7', '8', '6'))) : ?>			
+            <?php if (!empty($params['gameId']) && !in_array($params['gameId'], array('7', '8', '6','9'))) : ?>			
 			<button type="submit" class="btn btn-primary btn-block"  id="fb-button" ng-show="showFacebookLogin" ng-click="facebook($event)" ng-bind="fb.name" ng-disabled="fb.checked"></button>
             <span style="color:red">Vui lòng Set DNS 8.8.8.8 cho kết nối Wifi của bạn để đăng nhập bằng Facebook</span>			 
             <?php endif; ?>			
