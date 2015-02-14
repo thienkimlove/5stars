@@ -347,8 +347,11 @@ class PaymentsController extends AppController {
         if ($payment = $this->Payment->save($response)) {                        
             if ($payment['Payment']['payment_status'] == 1) {
                 //if demo dont send the payment to billing NPT.
+                //if google play dont send payment to NPT, when cron = 1 will send.
                 if ($response['demo'] == 0) {
-                    $this->Billing->sendPaymentToGame($payment);
+                    if ( empty($this->request->data['itemId'])) {
+                      $this->Billing->sendPaymentToGame($payment);  
+                    }                      
                 }                    
                 $this->set(array(
                     'payment' =>  $payment,
