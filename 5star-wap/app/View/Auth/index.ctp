@@ -8,7 +8,14 @@ Config.wap = <?php echo json_encode(Configure::read('wap')) ?>;
 Config.apiMessage = <?php echo (!empty($params['message']))? json_encode($params['message']) : 'false' ?>;
 </script>
 <?php echo $this->element('facebook') ?>
-    <?php echo $this->Html->image('giaothong.jpg') ?>
+    <?php if (!empty($params['gameId']) && in_array($params['gameId'], array('7', '8', '6'))) : ?>
+      <?php echo $this->Html->image('auto-in-mhv.jpg') ?>
+    <?php endif; ?>
+
+   <?php if (!empty($params['gameId']) && in_array($params['gameId'], array('9'))) : ?>
+     <?php echo $this->Html->image('mhv-in-auto.jpg') ?>
+   <?php endif; ?>
+
 	<!-- content -->
 	<div ng-app="userLoginApp" ng-controller="userLoginCtrl">
 		<div class="alert alert-block alert-error" ng-show="apiMessage" ng-bind="apiMessage">
