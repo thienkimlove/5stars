@@ -32,6 +32,7 @@
     @include('partials.header')
     <!-- Header end -->
     <!-- Nav begin -->
+
     <nav class="nav has-dropdown">
         <ul class="nav-list">
             <li class="item {{ !empty($pageHome)? 'active' : '' }}">

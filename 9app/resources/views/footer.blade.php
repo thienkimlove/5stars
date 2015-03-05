@@ -9,7 +9,6 @@
     <div class="friendly-links well">
         <ul class="row first">
             <li class="item"><div class="fb-like" data-href="http://appforandroidphone.com/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div></li>
-            <li class="item"><a class="icon_app" href="{{url('/')}}">AppForAndroidPhone App</a></li>
         </ul>
     </div>
 

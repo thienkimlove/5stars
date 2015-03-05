@@ -31,13 +31,14 @@ class MainController extends Controller {
      */
     public function games()
     {
-        $css = 'game';
+        $css = 'app';
         $games = Game::where('type', 'games')->latest('update')->paginate(20);
         $categories = Category::where('type', 'games')->latest()->take(7)->get();
         $pageGame = true;
 
         return view('games.app', compact('games', 'pageGame', 'categories', 'css'));
     }
+
 
     /**
      * @param $type

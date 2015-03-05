@@ -25,6 +25,7 @@ Route::get('/', 'MainController@index');
 //ajax
 Route::post('suggestion', 'MainController@suggestion');
 
+
 //categories list
 Route::get('android-games-categories', 'MainController@gameCategories');
 Route::get('android-apps-categories', 'MainController@appCategories');

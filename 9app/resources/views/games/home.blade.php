@@ -7,6 +7,7 @@
 
         <!-- Index nav begin -->
         <div class="index-nav">
+            <!--
             <ul>
                 <li class="new">
                     <a href="{{url('new-android-apps')}}">New
@@ -19,6 +20,7 @@
                     <a href="{{url('special')}}">Specials</a>
                 </li>
             </ul>
+            -->
         </div>
         <!-- Index nav end -->
 
