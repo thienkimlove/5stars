@@ -76,7 +76,7 @@
             <ul>
                 @foreach ($hotTags as $tag)
                     <li>
-                        <a class="j-press" href="{{url('search/tag-', str_replace(' ', '+', $tag['name']))}}">{{ $tag['name'] }}</a>
+                        <a class="j-press" href="{{url('search/tag-'.str_replace(' ', '+', $tag['name']))}}">{{ $tag['name'] }}</a>
                     </li>
                 @endforeach
             </ul>

@@ -24,7 +24,7 @@
         </div>
         <!-- Index nav end -->
 
-        <!--  
+        <!--
         <a class="ajaxtips" href="{{url('help')}}">How to Download apk files
             directly?<span class="go">GO</span></a>
          -->

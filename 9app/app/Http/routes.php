@@ -13,6 +13,7 @@
 
 use App\Category;
 use App\Game;
+use App\Keyword;
 
 Route::get('test', function(){
     return view('hentai');
