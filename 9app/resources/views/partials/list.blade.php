@@ -1,6 +1,6 @@
         @foreach($games as $game)
             <li class="item">
-                <a class="inner j-press" href="{{url('android-'.$game->type.'/', $game->slug)}}">
+                <a class="inner j-press" href="{{url('android-'.$game->type.'/'. $game->slug)}}">
                     <div class="pic">
                         <img class="" src="{{ url('images/avatars', $game->icon) }}" alt="icon">
                     </div>
