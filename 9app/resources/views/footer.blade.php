@@ -15,7 +15,7 @@
 
     <div class="footer-text">
         <a href="javascript:void(0)" class="giftbox">
-            <span>Like Us and Get Gifts!</span>
+            <div class="fb-like" data-href="http://appforandroidphone.com/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
         </a>
 
         <p>Contact: thienkimlove@gmail.com</p>
