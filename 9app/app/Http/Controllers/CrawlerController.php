@@ -30,11 +30,11 @@ class CrawlerController extends Controller
         set_time_limit(0);
         //$this->categoryCrawl('game');
 
-        $request = $this->client->createRequest('GET', 'http://downloader-apk.com/apps/2015/03/04/Facebook 28.0.0.20.16_[www.Downloader-Apk.com].apk');
+      /*  $request = $this->client->createRequest('GET', 'http://downloader-apk.com/apps/2015/03/04/Facebook 28.0.0.20.16_[www.Downloader-Apk.com].apk');
         $response = $this->client->send($request);
         if ($response->getStatusCode() == '200') {
             dd($response->getBody()->getContents());
-        }
+        }*/
     }
 
     public function categoryCrawl($type)
