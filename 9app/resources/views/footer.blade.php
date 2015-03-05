@@ -1,8 +1,10 @@
 <footer class="footer">
     <div class="footer-links">
+        <!--
         <a class="item" href="{{url('about')}}">About</a>
         <a class="item" href="{{url('feedback')}}">Feedback</a>
         <a class="item" href="{{url('help')}}">Help</a>
+        -->
         <a class="back-top j-press" href="#">Top</a>
     </div>
 

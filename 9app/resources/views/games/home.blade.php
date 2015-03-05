@@ -24,9 +24,10 @@
         </div>
         <!-- Index nav end -->
 
-        <!-- ** data-url: 请求的URL; data-expires: cookie过期时间(单位:天)，缺省值为365 ** -->
+        <!--  
         <a class="ajaxtips" href="{{url('help')}}">How to Download apk files
             directly?<span class="go">GO</span></a>
+         -->
         <div id="refresh" class="list-wrap">
             <ul id="refreshList" class="list bt">
                 @include('partials.list', ['games' => $games])
