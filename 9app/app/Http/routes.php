@@ -56,7 +56,7 @@ Route::get('store-sitemap', function()
 Route::get('android-games-categories', 'MainController@gameCategories');
 Route::get('android-apps-categories', 'MainController@appCategories');
 //list all.
-Route::get('android-games', ['as' => 'games', 'use' => 'MainController@games']);
+Route::get('android-games', 'MainController@games');
 Route::get('android-apps', 'MainController@apps');
 
 //search
@@ -66,7 +66,11 @@ Route::get('search', function(){
     $term = null;
     $pageSearch = true;
     $games = Game::latest('update')->paginate(20);
-    return view('games.search', compact('games', 'term', 'pageSearch', 'css', 'page'));
+    return view('games.search', compact('games', 'term', 'pageSearch', 'css', 'page'))->with([
+        'title' => 'Hot Search Android Apps - AppForAndroidPhone',
+        'desc' => '',
+        'keyword' => ''
+    ]);
 });
 Route::get('search/{tag}', function($tag) {
     if (preg_match('/tag-([a-z0-9\-]+)/', $tag, $matches)) {
@@ -88,7 +92,11 @@ Route::get('search/{tag}', function($tag) {
         } else {
             $games = Game::latest('update')->paginate(20);
         }
-        return view('games.search', compact('games', 'term', 'pageSearch', 'css', 'page'));
+        return view('games.search', compact('games', 'term', 'pageSearch', 'css', 'page'))->with([
+            'title' => 'Search result for '.$term.' - AppForAndroidPhone',
+            'desc' => '',
+            'keyword' => ''
+        ]);
     }
 });
 
@@ -100,7 +108,11 @@ Route::get('android/{value}', function($value){
         $category = Category::where('slug', $matches[1])->first();
         $games = Game::where('category_id', $category->id)->paginate(20);
         $page = $category->name;
-        return view('games.category', compact('category', 'games', 'page', 'css'));
+        return view('games.category', compact('category', 'games', 'page', 'css'))->with([
+            'title' => 'Top Android '.$category->name.' '.$category->type.' Download - AppForAndroidPhone',
+            'desc' => 'AppForAndroidPhone provide top and popular Android '.$category->name.' '.$category->type.' that will satisfy the needs of all types for you.',
+            'keyword' => 'top android '.$category->name.' '.$category->type
+        ]);
     }
 });
 //app details
@@ -108,13 +120,6 @@ Route::get('android-apps/{slug}', 'MainController@details');
 
 //game details
 Route::get('android-games/{slug}', 'MainController@details');
-
-
-
-
-
-
-
 
 
 Route::controllers([

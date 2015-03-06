@@ -6,7 +6,7 @@
     <div class="cate">
         <div class="cate-hd">
             <h1 class="cate-title">Categories</h1>
-            <a href="{{url('android-apps-categories')}}" class="more">More</a>
+            <a href="{{url('android-'.(!empty($pageGame) ? 'games' : 'apps').'-categories')}}" class="more">More</a>
         </div>
         <div class="cate-bd">
             <ul>
@@ -20,7 +20,7 @@
                 @endforeach
 
                 <li>
-                    <a href="{{url('android-apps-categories')}}" class="j-press">
+                    <a href="{{url('android-'.(!empty($pageGame) ? 'games' : 'apps').'-categories')}}" class="j-press">
                         <span class="icon-cate icon-more-cate"></span>
                         <img alt="Picture" src="{{url('files/more-cate.png')}}" class="icon-cate">
                         <p class="name">more</p>

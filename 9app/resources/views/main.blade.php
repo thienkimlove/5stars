@@ -8,10 +8,10 @@
     <title>Free Android Apps Download | Best Apps for Android Mobile Phone - AppForAndroidPhone</title>
     <meta property="og:type" content="website">
     <meta property="fb:app_id" content="579103738859108">
-    <meta property="og:title" content="Free Android Apps Download | Best Apps for Android Mobile Phone - AppForAndroidPhone">
+    <meta property="og:title" content="{{ $title  }}">
     <meta property="og:image" content="{{ url('files/9apps_present.png')  }}">
-    <meta name="description" content="appforandroidphone.com supports free android apps apk download. Thousands of top best android apps at AppForAndroidPhone! Play free apps for android mobile phone now!">
-    <meta name="keywords" content="android apps,android apps download,free android apps,best android apps,apps for android,AppForAndroidPhone">
+    <meta name="description" content="{{$desc}}">
+    <meta name="keywords" content="{{$keyword}}">
 
     <link href="{{ url('css/'.$css.'.css')  }}" rel="stylesheet">
 
