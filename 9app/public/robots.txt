@@ -1,2 +1,8 @@
 User-agent: *
-Disallow:
+Disallow: /cralwer/
+Disallow: /store-sitemap/
+Disallow: /suggestion/
+Disallow: /auth/
+
+Sitemap: http://appforandroidphone.com/sitemap.xml
+

@@ -9,8 +9,8 @@ app.controller('SearchController', function($scope, $timeout, $window){
         if ($scope.keyword.length > 2) {
             var slug = $scope.keyword
                 .toLowerCase()
-                .replace(/ /g,'+')
-                .replace(/[^\w-]\+/g,'');
+                .replace(/ /g,'-')
+                .replace(/[^\w-]/g,'');
             $window.location.href = Config.url + '/search/tag-' + slug ;
         }
      }
@@ -62,8 +62,8 @@ app.controller('EndSearchController', function($scope, $window, $http){
         if ($scope.keyword.length > 2) {
             var slug = $scope.keyword
                 .toLowerCase()
-                .replace(/ /g,'+')
-                .replace(/[^\w\+]+/g,'');
+                .replace(/ /g,'-')
+                .replace(/[^\w-]/g,'');
             $window.location.href = Config.url + '/search/tag-' + slug ;
         }
     }

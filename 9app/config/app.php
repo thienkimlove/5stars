@@ -149,7 +149,7 @@ return [
         'Laracasts\Flash\FlashServiceProvider',
         'Intervention\Image\ImageServiceProvider',
         'App\Providers\ViewComposerServiceProvider',
-
+        'Roumen\Sitemap\SitemapServiceProvider',
 
     ),
 
@@ -201,7 +201,7 @@ return [
         'Form'=> 'Illuminate\Html\FormFacade',
         'HTML'=> 'Illuminate\Html\HtmlFacade',
         'Flash' => 'Laracasts\Flash\Flash',
-        'Image' => 'Intervention\Image\Facades\Image'
+        'Image' => 'Intervention\Image\Facades\Image',
 	],
 
 ];

@@ -76,7 +76,7 @@
             <ul>
                 @foreach ($hotTags as $tag)
                     <li>
-                        <a class="j-press" href="{{url('search/tag-'.str_replace(' ', '+', $tag['name']))}}">{{ $tag['name'] }}</a>
+                        <a class="j-press" href="{{url('search/tag-'.str_replace(' ', '-', $tag['name']))}}">{{ $tag['name'] }}</a>
                     </li>
                 @endforeach
             </ul>
@@ -92,7 +92,7 @@
 <script>
     var Config = {};
     Config.url = '{{ url('/') }}';
-    Config.keyword = '{{ !empty($term) ? $term : $hotTags[0]['name'] }}';
+    Config.keyword = '{{ !empty($term) ? $term : $hotTags[array_rand($hotTags)]['name'] }}';
 </script>
 <script type="text/javascript" src="{{url('js/output.js')}}"></script>
 <script type="text/javascript" src="{{url('js/custom.js')}}"></script>

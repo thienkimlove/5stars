@@ -8,9 +8,9 @@ $baseDir = dirname($vendorDir);
 return array(
     $vendorDir . '/nikic/php-parser/lib/bootstrap.php',
     $vendorDir . '/symfony/var-dumper/Symfony/Component/VarDumper/Resources/functions/dump.php',
+    $vendorDir . '/swiftmailer/swiftmailer/lib/swift_required.php',
     $vendorDir . '/ircmaxell/password-compat/lib/password.php',
     $vendorDir . '/react/promise/src/functions_include.php',
-    $vendorDir . '/swiftmailer/swiftmailer/lib/swift_required.php',
     $vendorDir . '/psy/psysh/src/Psy/functions.php',
     $vendorDir . '/danielstjules/stringy/src/Create.php',
     $vendorDir . '/laravel/framework/src/Illuminate/Foundation/helpers.php',

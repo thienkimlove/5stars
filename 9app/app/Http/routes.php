@@ -14,10 +14,8 @@
 use App\Category;
 use App\Game;
 use App\Keyword;
+use Illuminate\Support\Facades\DB;
 
-Route::get('test', function(){
-    return view('hentai');
-});
 
 Route::get('crawler', 'CrawlerController@index');
 
@@ -26,12 +24,39 @@ Route::get('/', 'MainController@index');
 //ajax
 Route::post('suggestion', 'MainController@suggestion');
 
+//sitemap
+
+Route::get('store-sitemap', function()
+{
+    // create sitemap index
+    $sitemap = App::make ("sitemap");
+
+    $games = DB::table('games')->orderBy('created_at', 'desc')->get();
+    $categories = DB::table('categories')->get();
+    $keywords = DB::table('keywords')->get();
+
+    foreach ($categories as $category)
+    {
+        $sitemap->add(url('android', 'top-' . $category->slug . '-'.$category->type), null, '0.5', 'weekly');
+    }
+    foreach ($games as $game)
+    {
+        $sitemap->add(url('android-' . $game->type, $game->slug), null, '0.8', 'weekly');
+    }
+    foreach ($keywords as $keyword)
+    {
+        $sitemap->add(url('search', 'tag-'. str_replace(' ', '-', $keyword->name)), null, '0.8', 'weekly');
+    }
+    // create file sitemap.xml in your public folder (format, filename)
+    $sitemap->store('xml', 'sitemap');
+});
+
 
 //categories list
 Route::get('android-games-categories', 'MainController@gameCategories');
 Route::get('android-apps-categories', 'MainController@appCategories');
 //list all.
-Route::get('android-games', 'MainController@games');
+Route::get('android-games', ['as' => 'games', 'use' => 'MainController@games']);
 Route::get('android-apps', 'MainController@apps');
 
 //search
@@ -50,7 +75,7 @@ Route::get('search/{tag}', function($tag) {
         $pageSearch = true;
         $term = $matches[1];
         if (strlen($term) > 2) {
-            $term = str_replace('+',' ', $term);
+            $term = str_replace('-',' ', $term);
             $keyword = Keyword::where('name', $term)->first();
             if (!$keyword) {
                 $keyword = new Keyword();
