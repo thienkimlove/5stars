@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Package;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Facades\Image;
@@ -256,23 +257,28 @@ class CrawlerController extends Controller
      */
     protected function saveGames($data, $package)
     {
-        $check = Package::where('name', $package)->first();
-        if (!$check) {
-            $data['icon'] = $this->saveImageFromLink($data['icon'], 'avatars');
-            if ($data['icon']) {
-                $category = Category::where('name', $data['category'])->first();
-                if (!$category) {
-                    copy(public_path() . '/images/avatars/' . $data['icon'], public_path() . '/images/categories/' . $data['icon']);
-                    $category = Category::create(['name' => $data['category'], 'icon' => $data['icon'], 'type' => $data['type']]);
+        $data['icon'] = $this->saveImageFromLink($data['icon'], 'avatars');
+        if ($data['icon']) {
+            $category = Category::where('name', $data['category'])->first();
+            if (!$category) {
+                copy(public_path() . '/images/avatars/' . $data['icon'], public_path() . '/images/categories/' . $data['icon']);
+                $category = Category::create(['name' => $data['category'], 'icon' => $data['icon'], 'type' => $data['type']]);
+            }
+            $data['category_id'] = $category->id;
+            $game = Game::create($data);
+            foreach ($data['screens'] as $urlCapture) {
+                $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
+                if ($urlCapture) {
+                    Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
                 }
-                $data['category_id'] = $category->id;
-                $game = Game::create($data);
-                foreach ($data['screens'] as $urlCapture) {
-                    $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
-                    if ($urlCapture) {
-                        Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
-                    }
-                }
+            }
+            try {
+                Package::create([
+                    'game_id' => $game->id,
+                    'name' => $package
+                ]);
+            } catch (QueryException $e) {
+                DB::table('packages')->where('name', $package)->delete();
                 Package::create([
                     'game_id' => $game->id,
                     'name' => $package
