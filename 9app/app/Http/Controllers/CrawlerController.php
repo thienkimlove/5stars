@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Package;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Facades\Image;
 use PhpSpec\Exception\Exception;
 use Symfony\Component\DomCrawler\Crawler;
@@ -41,7 +42,7 @@ class CrawlerController extends Controller
         $path = public_path() . '/images/' . $case . '/' . $name;
         try {
             Image::make($url)->save($path);
-        }  catch (Exception $e) {
+        }  catch (NotReadableException $e) {
            return;
         }
         return $name;
