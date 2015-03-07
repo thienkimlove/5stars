@@ -22,7 +22,7 @@ Route::get('import', 'CrawlerController@import');
 
 //main
 Route::get('/', 'MainController@index');
-//ajax
+//ajaxE
 Route::post('suggestion', 'MainController@suggestion');
 
 //sitemap

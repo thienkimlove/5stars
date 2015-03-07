@@ -95,11 +95,36 @@ class CrawlerController extends Controller
     {
         set_time_limit(0);
         //get the list of package.
-        $url = 'https://play.google.com/store/apps/collection/topselling_new_free?hl=en&gl=us';
-        $packages = $this->googlePackageListFromPage($url);
+       /* if ($page == 'google_new_free') {
+            $url = 'https://play.google.com/store/apps/collection/topselling_new_free?hl=en&gl=us';
+            $packages = $this->googlePackageListFromPage($url);
+        } else if ($page == 'google_free') {
+            $url = 'https://play.google.com/store/apps/collection/topselling_free?hl=en&gl=us';
+            $packages = $this->googlePackageListFromPage($url);
+        } else if ($page == 'google_cate') {
+            $url = 'https://play.google.com/store/apps/category/GAME_ACTION/collection/topselling_free?hl=en&gl=us';
+            $packages = $this->googlePackageListFromPage($url);
+        }*/
+
+        $response =  $this->crawlerLink('https://play.google.com/store/apps?hl=en&gl=us');
+        $crawler = new Crawler($response);
+        $links = $crawler->filter('body a.child-submenu-link');
+        $data = [];
+        foreach ($links as $i => $link) {
+            $temp = new Crawler($link);
+            $data[$i] = 'https://play.google.com' . $temp->attr('href').'/collection/topselling_free?hl=en&gl=us';
+        }
+        $packages = [];
+        foreach ($data as $item) {
+            $packages[] = $this->googlePackageListFromPage($item);
+        }
         foreach ($packages as $package) {
             $this->addToPackages($package);
         }
+
+    }
+
+    public function import(){
 
     }
 
