@@ -39,7 +39,11 @@ class CrawlerController extends Controller
             $name = md5(time()) . '.png';
         }
         $path = public_path() . '/images/' . $case . '/' . $name;
-        Image::make($url)->save($path);
+        try {
+            Image::make($url)->save($path);
+        }  catch (Exception $e) {
+           return;
+        }
         return $name;
     }
 
@@ -218,17 +222,23 @@ class CrawlerController extends Controller
     protected function saveGames($data)
     {
         $data['icon'] = $this->saveImageFromLink($data['icon'], 'avatars');
-        $category = Category::where('name', $data['category'])->first();
-        if (!$category) {
-            copy(public_path() . '/images/avatars/' . $data['icon'], public_path() . '/images/categories/' . $data['icon']);
-            $category = Category::create(['name' => $data['category'], 'icon' => $data['icon'], 'type' => $data['type']]);
+        if ($data['icon']) {
+            $category = Category::where('name', $data['category'])->first();
+            if (!$category) {
+                copy(public_path() . '/images/avatars/' . $data['icon'], public_path() . '/images/categories/' . $data['icon']);
+                $category = Category::create(['name' => $data['category'], 'icon' => $data['icon'], 'type' => $data['type']]);
+            }
+            $data['category_id'] = $category->id;
+            $game = Game::create($data);
+            foreach ($data['screens'] as $urlCapture) {
+                $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
+                if ($urlCapture) {
+                    Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
+                }
+            }
+            return $game;
         }
-        $data['category_id'] = $category->id;
-        $game = Game::create($data);
-        foreach ($data['screens'] as $urlCapture) {
-            $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
-            Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
-        }
-        return $game;
+        return;
+
     }
 }
