@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Package;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\Exception\NotReadableException;
 use Intervention\Image\Facades\Image;
 use PhpSpec\Exception\Exception;
@@ -106,6 +107,7 @@ class CrawlerController extends Controller
             $packages = $this->googlePackageListFromPage($url);
         }*/
 
+        DB::table('stores')->truncate();
         $response =  $this->crawlerLink('https://play.google.com/store/apps?hl=en&gl=us');
         $crawler = new Crawler($response);
         $links = $crawler->filter('body a.child-submenu-link');
@@ -117,15 +119,26 @@ class CrawlerController extends Controller
         foreach ($data as $item) {
             $packages = $this->googlePackageListFromPage($item);
             foreach ($packages as $package) {
-                $this->addToPackages($package);
+                DB::table('stores')->insert([
+                    'name' => $package,
+                    'status' => 'not'
+                ]);
             }
         }
-
-
     }
 
+    /**
+     * get list of package name in table store and then process.
+     *
+     */
     public function import(){
-
+        $lists = DB::table('stores')->where('status', 'not')->lists('name');
+        foreach ($lists as $list) {
+            $this->addToPackages($list);
+            DB::table('stores')
+                ->where('name', $list)
+                ->update(['status' => 'done']);
+        }
     }
 
 

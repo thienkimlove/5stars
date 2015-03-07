@@ -1,6 +1,8 @@
 User-agent: *
 Disallow: /cralwer/
 Disallow: /cralwer
+Disallow: /import
+Disallow: /import/
 Disallow: /store-sitemap/
 Disallow: /store-sitemap
 Disallow: /suggestion/
