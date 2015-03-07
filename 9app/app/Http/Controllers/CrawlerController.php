@@ -43,8 +43,8 @@ class CrawlerController extends Controller
         $path = public_path() . '/images/' . $case . '/' . $name;
         try {
             Image::make($url)->save($path);
-        }  catch (NotReadableException $e) {
-           return;
+        } catch (NotReadableException $e) {
+            return;
         }
         return $name;
     }
@@ -96,25 +96,25 @@ class CrawlerController extends Controller
     {
         set_time_limit(0);
         //get the list of package.
-       /* if ($page == 'google_new_free') {
-            $url = 'https://play.google.com/store/apps/collection/topselling_new_free?hl=en&gl=us';
-            $packages = $this->googlePackageListFromPage($url);
-        } else if ($page == 'google_free') {
-            $url = 'https://play.google.com/store/apps/collection/topselling_free?hl=en&gl=us';
-            $packages = $this->googlePackageListFromPage($url);
-        } else if ($page == 'google_cate') {
-            $url = 'https://play.google.com/store/apps/category/GAME_ACTION/collection/topselling_free?hl=en&gl=us';
-            $packages = $this->googlePackageListFromPage($url);
-        }*/
+        /* if ($page == 'google_new_free') {
+             $url = 'https://play.google.com/store/apps/collection/topselling_new_free?hl=en&gl=us';
+             $packages = $this->googlePackageListFromPage($url);
+         } else if ($page == 'google_free') {
+             $url = 'https://play.google.com/store/apps/collection/topselling_free?hl=en&gl=us';
+             $packages = $this->googlePackageListFromPage($url);
+         } else if ($page == 'google_cate') {
+             $url = 'https://play.google.com/store/apps/category/GAME_ACTION/collection/topselling_free?hl=en&gl=us';
+             $packages = $this->googlePackageListFromPage($url);
+         }*/
 
         DB::table('stores')->truncate();
-        $response =  $this->crawlerLink('https://play.google.com/store/apps?hl=en&gl=us');
+        $response = $this->crawlerLink('https://play.google.com/store/apps?hl=en&gl=us');
         $crawler = new Crawler($response);
         $links = $crawler->filter('body a.child-submenu-link');
         $data = [];
         foreach ($links as $i => $link) {
             $temp = new Crawler($link);
-            $data[$i] = 'https://play.google.com' . $temp->attr('href').'/collection/topselling_free?hl=en&gl=us';
+            $data[$i] = 'https://play.google.com' . $temp->attr('href') . '/collection/topselling_free?hl=en&gl=us';
         }
         foreach ($data as $item) {
             $packages = $this->googlePackageListFromPage($item);
@@ -131,7 +131,9 @@ class CrawlerController extends Controller
      * get list of package name in table store and then process.
      *
      */
-    public function import(){
+    public function import()
+    {
+        set_time_limit(0);
         $lists = DB::table('stores')->where('status', 'not')->lists('name');
         foreach ($lists as $list) {
             $this->addToPackages($list);
@@ -173,14 +175,7 @@ class CrawlerController extends Controller
         $check = Package::where('name', $temp)->first();
         if (!$check) {
             //add to game.
-            $game = $this->addToGame($temp);
-            if ($game) {
-                Package::create([
-                    'game_id' => $game->id,
-                    'name' => $temp
-                ]);
-            }
-
+            $this->addToGame($temp);
         }
     }
 
@@ -247,37 +242,42 @@ class CrawlerController extends Controller
         $data['site'] = 'https://play.google.com';
         $data['download'] = @$this->getLinkDownloadApk($package);
         if (!$data['download']) {
-           $data['download'] = $link;
+            $data['download'] = $link;
         }
-        return $this->saveGames($data);
+        $this->saveGames($data, $package);
     }
 
     /**
      * save one game.
      * @param $data
+     * @param $package
      * @return static
      * @internal param $item
      */
-    protected function saveGames($data)
+    protected function saveGames($data, $package)
     {
-        $data['icon'] = $this->saveImageFromLink($data['icon'], 'avatars');
-        if ($data['icon']) {
-            $category = Category::where('name', $data['category'])->first();
-            if (!$category) {
-                copy(public_path() . '/images/avatars/' . $data['icon'], public_path() . '/images/categories/' . $data['icon']);
-                $category = Category::create(['name' => $data['category'], 'icon' => $data['icon'], 'type' => $data['type']]);
-            }
-            $data['category_id'] = $category->id;
-            $game = Game::create($data);
-            foreach ($data['screens'] as $urlCapture) {
-                $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
-                if ($urlCapture) {
-                    Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
+        $check = Package::where('name', $package)->first();
+        if (!$check) {
+            $data['icon'] = $this->saveImageFromLink($data['icon'], 'avatars');
+            if ($data['icon']) {
+                $category = Category::where('name', $data['category'])->first();
+                if (!$category) {
+                    copy(public_path() . '/images/avatars/' . $data['icon'], public_path() . '/images/categories/' . $data['icon']);
+                    $category = Category::create(['name' => $data['category'], 'icon' => $data['icon'], 'type' => $data['type']]);
                 }
+                $data['category_id'] = $category->id;
+                $game = Game::create($data);
+                foreach ($data['screens'] as $urlCapture) {
+                    $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
+                    if ($urlCapture) {
+                        Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
+                    }
+                }
+                Package::create([
+                    'game_id' => $game->id,
+                    'name' => $package
+                ]);
             }
-            return $game;
         }
-        return;
-
     }
 }

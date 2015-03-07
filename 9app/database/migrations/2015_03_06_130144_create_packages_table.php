@@ -18,7 +18,7 @@ class CreatePackagesTable extends Migration {
 		{
 			$table->increments('id');
             $table->integer('game_id')->unsigned();
-            $table->string('name', 100)->unique();
+            $table->string('name')->unique();
             $table->string('status')->nullable();
 			$table->timestamps();
 
