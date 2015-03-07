@@ -90,7 +90,7 @@ class CrawlerController extends Controller
     {
         set_time_limit(0);
         //get the list of package.
-        $url = 'https://play.google.com/store/apps/collection/topselling_new_free?hl=en';
+        $url = 'https://play.google.com/store/apps/collection/topselling_new_free?hl=en&gl=us';
         $packages = $this->googlePackageListFromPage($url);
         foreach ($packages as $package) {
             $this->addToPackages($package);
@@ -148,13 +148,12 @@ class CrawlerController extends Controller
      */
     protected function addToGame($package)
     {
-        $link = 'https://play.google.com/store/apps/details?id=' . $package . '&hl=en';
+        $link = 'https://play.google.com/store/apps/details?id=' . $package . '&hl=en&gl=us';
         $response = $this->crawlerLink($link);
         $crawler = new  Crawler($response);
 
         $data = [];
         $data['icon'] = $crawler->filter('div.details-info > div.cover-container > img.cover-image')->attr('src');
-        $data['icon'] = $this->saveImageFromLink($data['icon'], 'avatars');
         $data['title'] = $crawler->filter('div.details-info > div.info-container > div.document-title > div')->text();
         $type = $crawler->filter('div.details-info > div.info-container a.category')->attr('href');
 
@@ -195,7 +194,12 @@ class CrawlerController extends Controller
         }
 
         $data['desc'] = $crawler->filter('div.details-section-contents div.id-app-orig-desc')->html();
-        $data['news'] = $crawler->filter('div.whatsnew div.recent-change')->html();
+        $data['news'] = $crawler->filter('div.whatsnew div.recent-change');
+        if (count($data['news'])) {
+            $data['news'] = $data['news']->html();
+        } else {
+            $data['news'] = '';
+        }
         $data['link'] = $link;
         $data['site'] = 'https://play.google.com';
         $data['download'] = @$this->getLinkDownloadApk($package);
@@ -213,6 +217,7 @@ class CrawlerController extends Controller
      */
     protected function saveGames($data)
     {
+        $data['icon'] = $this->saveImageFromLink($data['icon'], 'avatars');
         $category = Category::where('name', $data['category'])->first();
         if (!$category) {
             copy(public_path() . '/images/avatars/' . $data['icon'], public_path() . '/images/categories/' . $data['icon']);
