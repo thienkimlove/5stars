@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 
 Route::get('crawler', 'CrawlerController@index');
+Route::get('import', 'CrawlerController@import');
 
 //main
 Route::get('/', 'MainController@index');
@@ -35,16 +36,13 @@ Route::get('store-sitemap', function()
     $categories = DB::table('categories')->get();
     $keywords = DB::table('keywords')->get();
 
-    foreach ($categories as $category)
-    {
+    foreach ($categories as $category) {
         $sitemap->add(url('android', 'top-' . $category->slug . '-'.$category->type), null, '0.5', 'weekly');
     }
-    foreach ($games as $game)
-    {
+    foreach ($games as $game) {
         $sitemap->add(url('android-' . $game->type, $game->slug), null, '0.8', 'weekly');
     }
-    foreach ($keywords as $keyword)
-    {
+    foreach ($keywords as $keyword) {
         $sitemap->add(url('search', 'tag-'. str_replace(' ', '-', $keyword->name)), null, '0.8', 'weekly');
     }
     // create file sitemap.xml in your public folder (format, filename)

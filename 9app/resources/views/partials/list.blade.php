@@ -18,7 +18,7 @@
                         </p>
                     </div>
                 </a>
-                <a class="btn-download j-press" href="{{ $game->download }}">Download</a>
+                <a class="btn-download j-press" rel="nofollow" href="{{ $game->download }}">Download</a>
             </li>
         @endforeach
 

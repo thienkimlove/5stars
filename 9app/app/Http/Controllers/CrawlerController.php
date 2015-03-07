@@ -4,6 +4,8 @@ use App\Capture;
 use App\Category;
 use App\Game;
 use App\Http\Requests;
+use App\Package;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Intervention\Image\Facades\Image;
 use PhpSpec\Exception\Exception;
@@ -22,71 +24,6 @@ class CrawlerController extends Controller
     }
 
     /**
-     * parse
-     */
-    public function index()
-    {
-
-        set_time_limit(0);
-        //$this->categoryCrawl('game');
-
-      /*  $request = $this->client->createRequest('GET', 'http://downloader-apk.com/apps/2015/03/04/Facebook 28.0.0.20.16_[www.Downloader-Apk.com].apk');
-        $response = $this->client->send($request);
-        if ($response->getStatusCode() == '200') {
-            dd($response->getBody()->getContents());
-        }*/
-    }
-
-    public function categoryCrawl($type)
-    {
-        $case = ($type == 'app') ? 'apps' : 'games';
-        $response = $this->crawlerLink('http://www.9apps.com/android-'.$case.'-categories/');
-        if ($response) {
-            $crawler = new Crawler($response);
-            // apply css selector filter
-            $filter = $crawler->filter('ul.cate-list > li.item');
-            if (iterator_count($filter) > 0) {
-                foreach ($filter as $item) {
-                    if ($item) {
-                        $category = ['type' => $type];
-                        $block = new Crawler($item);
-                        $category['icon'] = $block->filter('a.inner > img.icon-cate')->attr('dataimg');
-                        $category['name'] = $block->filter('div.descr > p.name')->text();
-                        $category['icon'] = $this->saveImageFromLink($category['icon'], 'categories');
-                        $cat = Category::where('name', $category['name'])->first();
-                        //dd($category);
-                        if (!$cat) {
-                            Category::create($category);
-                        } else {
-                            $cat->update($category);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * save one game.
-     * @param $item
-     */
-    protected function saveGames($item)
-    {
-        $item['type'] = 'game';
-        $category = Category::where('name', $item['category'])->first();
-        if (!$category) {
-            $category = Category::create(['name' => $item['category']]);
-        }
-        $item['category_id'] = $category->id;
-        $item['icon'] = $this->saveImageFromLink($item['icon'], 'avatars');
-        $game = Game::create($item);
-        foreach ($item['screenshot'] as $urlCapture) {
-            $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
-            Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
-        }
-    }
-
-    /**
      * save image to public.
      * @param $url
      * @param $case
@@ -95,47 +32,28 @@ class CrawlerController extends Controller
     protected function saveImageFromLink($url, $case)
     {
         $ars = explode('.', $url);
-        $name = md5(time()) . '.' . end($ars);
+        $ext = end($ars);
+        if (in_array($ext, ['jpg', 'png', 'jpeg', 'gif'])) {
+            $name = md5(time()) . '.' . end($ars);
+        } else {
+            $name = md5(time()) . '.png';
+        }
         $path = public_path() . '/images/' . $case . '/' . $name;
         Image::make($url)->save($path);
         return $name;
     }
 
-    /**
-     * get list of apps link
-     * @param $filter
-     * @return array
-     */
-    protected function blockItems($filter)
-    {
-        $result = array();
-        if (iterator_count($filter) > 1) {
-            // iterate over filter results
-            foreach ($filter as $i => $content) {
-                // create crawler instance for result
-                if ($content) {
-                    $crawler = new Crawler($content);
-                    // extract the values needed
-                    $result[$i] = array(
-                        'title' => $crawler->filter('p.name')->text(),
-                        'link' => $crawler->filter('a.inner')->attr('href')
-                    );
-                }
-
-            }
-        }
-        return $result;
-    }
 
     /**
      * crawl a link     *
      * @param $link
+     * @param bool $redirect
      * @return string
      */
-    protected function crawlerLink($link)
+    protected function crawlerLink($link, $redirect = false)
     {
         try {
-            $request = $this->client->createRequest('GET', $link);
+            $request = $this->client->createRequest('GET', $link, ['allow_redirects' => $redirect]);
             $response = $this->client->send($request);
             if ($response->getStatusCode() == '200') {
                 return $response->getBody()->getContents();
@@ -146,89 +64,166 @@ class CrawlerController extends Controller
     }
 
     /**
-     * crawl a page list apps
-     * @param $page
+     * get link download from download-apk.com
+     * @param $package
+     * @return string|void
+     */
+    protected function getLinkDownloadApk($package)
+    {
+        $response = $this->crawlerLink('http://downloader-apk.com/download/dl.php?dl=' . $package, false);
+        $response = preg_split('/\r\n|\n|\r/', $response);
+        foreach ($response as $line) {
+            if (strpos($line, "setTimeout('location.href=") !== false) {
+                $line = str_replace('setTimeout(\'location.href="..', 'http://downloader-apk.com', $line);
+                $line = str_replace('"\',25000);', '', $line);
+                return trim($line);
+            }
+        }
+        return;
+    }
+
+
+    /**
+     * parse
+     */
+    public function index()
+    {
+        set_time_limit(0);
+        //get the list of package.
+        $url = 'https://play.google.com/store/apps/collection/topselling_new_free?hl=en';
+        $packages = $this->googlePackageListFromPage($url);
+        foreach ($packages as $package) {
+            $this->addToPackages($package);
+        }
+
+    }
+
+
+    /**
+     * Google Store
+     * later we must add many of this function.
+     * get the array of packages name list from a page.
+     * @param $url
      * @return array
      */
-    protected function pageCrawler($page)
+    protected function googlePackageListFromPage($url)
     {
-        $stores = [];
-        $response = $this->crawlerLink('http://www.9apps.com/android-games-' . $page . '/');
-        if ($response) {
-            $crawler = new Crawler($response);
-            // apply css selector filter
-            $filter = $crawler->filter('div.list-wrap > ul.list > li.item');
-            $result = $this->blockItems($filter);
+        $topNewFree = $this->crawlerLink($url);
+        $crawler = new  Crawler($topNewFree);
+        $items = $crawler->filter('div.card-list > div.card');
+        $packages = [];
+        foreach ($items as $item) {
+            $game = new Crawler($item);
+            $temp = $game->filter('div.card-content > div.cover > a.card-click-target')->attr('href');
+            $packages[] = str_replace('/store/apps/details?id=', '', $temp);
+        }
+        return $packages;
+    }
 
+    /** check if package name exist on table packages
+     * if not, then add item to game and add to packages.
+     * @param $game_id
+     * @param $temp
+     */
+    protected function addToPackages($temp)
+    {
+        $check = Package::where('name', $temp)->first();
+        if (!$check) {
+            //add to game.
+            $game = $this->addToGame($temp);
+            if ($game) {
+                Package::create([
+                    'game_id' => $game->id,
+                    'name' => $temp
+                ]);
+            }
 
-            foreach ($result as $i => $item) {
-                $stores[$i]['site'] = 'http://www.9apps.com';
-                $stores[$i]['link'] = $stores[$i]['site'] . $item['link'];
-                $response = $this->crawlerLink($stores[$i]['link']);
-                if ($response) {
-                    $crawler = new Crawler($response);
-                    $stores[$i]['icon'] = $crawler->filter('div.main-info > div.pic > img')->attr('dataimg');
-                    $stores[$i]['title'] = $crawler->filter('div.text > p.name')->text();
-                    if (strpos($stores[$i]['title'], '9Apps') === false) {
-                        $stores[$i]['category'] = $crawler->filter('div.text > p.other > a.type')->text();
-                        $stores[$i]['total'] = $crawler->filter('div.text > p.other > span')->text();
-                        $stores[$i]['total'] = trim(str_replace('| ', '', $stores[$i]['total']));
+        }
+    }
 
-                        $shotImages = $crawler->filter('div.screenshot > ul > li');
+    /**
+     * crawl details page by package name on google store.
+     * @param $package
+     * @return CrawlerController|void
+     */
+    protected function addToGame($package)
+    {
+        $link = 'https://play.google.com/store/apps/details?id=' . $package . '&hl=en';
+        $response = $this->crawlerLink($link);
+        $crawler = new  Crawler($response);
 
-                        $stores[$i]['screenshot'] = [];
-                        if (iterator_count($shotImages) > 0) {
-                            foreach ($shotImages as $j => $shot) {
-                                if ($shot) {
-                                    $block = new Crawler($shot);
-                                    $stores[$i]['screenshot'][$j] = $block->filter('img')->attr('dataimg');
-                                }
-                            }
-                        }
-                        $tempDesc = $crawler->filter('div.panel-descr');
-                        $count = 0;
-                        if (iterator_count($tempDesc) > 0) {
-                            foreach ($tempDesc as $desc) {
-                                if ($desc) {
-                                    $descBlock = new Crawler($desc);
-                                    if ($count == 0) {
-                                        $stores[$i]['desc'] = $descBlock->filter('div.panel-bd > p.text')->html();
-                                    } else {
-                                        $stores[$i]['news'] = $descBlock->filter('div.panel-bd > p.text')->html();
-                                    }
-                                }
-                                $count++;
-                            }
-                        }
+        $data = [];
+        $data['icon'] = $crawler->filter('div.details-info > div.cover-container > img.cover-image')->attr('src');
+        $data['icon'] = $this->saveImageFromLink($data['icon'], 'avatars');
+        $data['title'] = $crawler->filter('div.details-info > div.info-container > div.document-title > div')->text();
+        $type = $crawler->filter('div.details-info > div.info-container a.category')->attr('href');
 
-                        $tempInformation = $crawler->filter('div.panel-info > div.panel-bd > p');
-                        $count = 0;
-                        if (iterator_count($tempInformation) > 0) {
-                            foreach ($tempInformation as $info) {
-                                if ($info) {
-                                    $infoBlock = new Crawler($info);
-                                    if ($count == 0) {
-                                        $stores[$i]['update'] = trim(str_replace('Update: ', '', $infoBlock->text()));
-                                    } else if ($count == 1) {
-                                        $stores[$i]['version'] = trim(str_replace('Version: ', '', $infoBlock->text()));
-                                    } else {
-                                        $stores[$i]['require'] = trim(str_replace('Requires: ', '', $infoBlock->text()));
-                                    }
-                                }
-                                $count++;
-                            }
-                        }
-                        $stores[$i]['download'] = $stores[$i]['site'] . $crawler->filter('div.panel-ft > a.btn-download')->attr('href');
-                        //dd($stores[$i]);
-                        $this->saveGames($stores[$i]);
-                    }
+        $data['type'] = (strpos($type, 'GAME_') !== false) ? 'games' : 'apps';
+        $data['category'] = $crawler->filter('div.details-info > div.info-container a.category > span')->text();
+        $data['screens'] = [];
+        $captures = $crawler->filter('div.screenshots img.screenshot');
+        if (iterator_count($captures) > 0) {
+            foreach ($captures as $capture) {
+                $temp = new Crawler($capture);
+                $data['screens'][] = $temp->attr('src');
+            }
+        }
 
+        $tempMeta = $crawler->filter('div.metadata div.details-section-contents > div.meta-info');
+
+        if (iterator_count($tempMeta) > 0) {
+            foreach ($tempMeta as $i => $meta) {
+                $tempUpdate = new Crawler($meta);
+                if ($i == 0) {
+                    $data['update'] = $tempUpdate->filter('div.content')->text();
+                    $data['update'] = Carbon::parse($data['update'])->format('Y-m-d');
+                }
+                if ($i == 1) {
+                    $data['total'] = $tempUpdate->filter('div.content')->text();
+                    $data['total'] = trim($data['total']);
+                }
+                if ($i == 3) {
+                    $data['version'] = $tempUpdate->filter('div.content')->text();
+                    $data['version'] = trim($data['version']);
+                }
+                if ($i == 4) {
+                    $data['require'] = $tempUpdate->filter('div.content')->text();
+                    $data['require'] = trim($data['require']);
                 }
 
             }
         }
 
-        return $stores;
+        $data['desc'] = $crawler->filter('div.details-section-contents div.id-app-orig-desc')->html();
+        $data['news'] = $crawler->filter('div.whatsnew div.recent-change')->html();
+        $data['link'] = $link;
+        $data['site'] = 'https://play.google.com';
+        $data['download'] = @$this->getLinkDownloadApk($package);
+        if (!$data['download']) {
+           $data['download'] = $link;
+        }
+        return $this->saveGames($data);
     }
 
+    /**
+     * save one game.
+     * @param $data
+     * @return static
+     * @internal param $item
+     */
+    protected function saveGames($data)
+    {
+        $category = Category::where('name', $data['category'])->first();
+        if (!$category) {
+            copy(public_path() . '/images/avatars/' . $data['icon'], public_path() . '/images/categories/' . $data['icon']);
+            $category = Category::create(['name' => $data['category'], 'icon' => $data['icon'], 'type' => $data['type']]);
+        }
+        $data['category_id'] = $category->id;
+        $game = Game::create($data);
+        foreach ($data['screens'] as $urlCapture) {
+            $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
+            Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
+        }
+        return $game;
+    }
 }

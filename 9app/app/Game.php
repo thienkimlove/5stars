@@ -5,7 +5,7 @@ use Illuminate\Support\Str;
 
 class Game extends Model {
 
-	protected $fillable = ['link','site','icon', 'title', 'category_id', 'total', 'desc', 'news', 'update', 'version', 'require', 'download'];
+	protected $fillable = ['link','site','icon', 'title', 'category_id', 'total', 'desc', 'news', 'update', 'version', 'require', 'download', 'type'];
 
     /**
      * When title change then slug will change.
@@ -46,5 +46,13 @@ class Game extends Model {
     public function captures()
     {
         return $this->hasMany('App\Capture');
+    }
+    /**
+     * app have many packages.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function packages()
+    {
+        return $this->hasMany('App\Package');
     }
 }
