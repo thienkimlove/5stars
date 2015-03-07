@@ -114,13 +114,13 @@ class CrawlerController extends Controller
             $temp = new Crawler($link);
             $data[$i] = 'https://play.google.com' . $temp->attr('href').'/collection/topselling_free?hl=en&gl=us';
         }
-        $packages = [];
         foreach ($data as $item) {
-            $packages[] = $this->googlePackageListFromPage($item);
+            $packages = $this->googlePackageListFromPage($item);
+            foreach ($packages as $package) {
+                $this->addToPackages($package);
+            }
         }
-        foreach ($packages as $package) {
-            $this->addToPackages($package);
-        }
+
 
     }
 
