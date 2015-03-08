@@ -10,7 +10,7 @@
     <div id="suggestion" style="display:block" class="search-suggestion" data-ng-show="haveSuggestionData">
         <ul class="suggestion-list">
             <li class="item" data-ng-repeat="first in firstSuggestion">
-                <a class="inner j-press" href="<% makeUrl(first) %>">
+                <a class="inner j-press" data-ng-href="<% makeUrl(first) %>">
                     <img data-ng-src="<% makeIcon(first.icon) %>" alt="Picture">
                     <p class="name"><% first.title %></p>
                     <p class="other">
@@ -21,7 +21,7 @@
             </li>
 
             <li class="item" data-ng-repeat="suggest in appSuggestions">
-                <a class="inner j-press" ng-href="<% makeUrl(suggest) %>"><% suggest.title %></a>
+                <a class="inner j-press" data-ng-href="<% makeUrl(suggest) %>"><% suggest.title %></a>
             </li>
 
         </ul>

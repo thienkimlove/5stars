@@ -12,7 +12,7 @@
     <meta property="og:image" content="{{ url('files/9apps_present.png')  }}">
     <meta name="description" content="{{$desc}}">
     <meta name="keywords" content="{{$keyword}}">
-
+    <link rel="alternate" href="http://appforandroidphone.com" hreflang="en" />
     <link href="{{ url('css/'.$css.'.css')  }}" rel="stylesheet">
 
     </head>
