@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 
 Route::get('crawler', 'CrawlerController@index');
 Route::get('import', 'CrawlerController@import');
-Route::get('download/{id}', 'CrawlerController@download');
+Route::get('download/{id}', 'MainController@download');
 
 //main
 Route::get('/', 'MainController@index');

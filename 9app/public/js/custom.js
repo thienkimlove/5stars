@@ -37,6 +37,10 @@ app.controller('EndSearchController', function($scope, $window, $http){
         return Config.url + '/images/avatars/' + icon;
     }
 
+    $scope.makeDownload = function(id) {
+        return Config.url  + '/download/' + id;
+    }
+
     $scope.showSuggestion = function(){
         if ($scope.keyword.length > 2 && $scope.keyword != Config.keyword) {
             $scope.haveSuggestionData = false;

@@ -17,7 +17,7 @@
                         <span class="size"><% first.total %></span>
                     </p>
                 </a>
-                <a class="btn-download j-press" data-ng-href="<% first.download %>">Download</a>
+                <a class="btn-download j-press" data-ng-href="<% makeDownload(first.id) %>">Download</a>
             </li>
 
             <li class="item" data-ng-repeat="suggest in appSuggestions">
