@@ -51,8 +51,8 @@ class Game extends Model {
      * app have many packages.
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function packages()
+    public function package()
     {
-        return $this->hasMany('App\Package');
+        return $this->hasOne('App\Package');
     }
 }

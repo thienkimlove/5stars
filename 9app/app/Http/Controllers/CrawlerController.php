@@ -89,6 +89,27 @@ class CrawlerController extends Controller
         return;
     }
 
+    /**
+     * @param $gameId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function download($gameId) {
+        $game = Game::find($gameId);
+        $download = null;
+        if ($game) {
+            if ($game->site == 'https://play.google.com') {
+                $package = $game->package->name;
+                $download = $this->getLinkDownloadApk($package);
+                if (!$download || ($download == 'http://downloader-apk.com/')) {
+                    $download = 'https://play.google.com/store/apps/details?id='.$package.'&hl=en&gl=us';
+                }
+            } else {
+                $download = $game->download;
+            }
+        }
+        return ($download) ? redirect($download) : redirect('/');
+    }
+
 
     /**
      * parse

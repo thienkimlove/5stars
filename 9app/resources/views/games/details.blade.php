@@ -17,7 +17,7 @@
 
             <!-- Have tow buttons -->
             <div class="aside">
-                <a href="{{$game->download}}" class="btn btn-download j-press">Download</a>
+                <a href="{{ url('download', $game->id)  }}" class="btn btn-download j-press">Download</a>
             </div>
 
         </div>
@@ -57,7 +57,7 @@
 
             <!-- Have tow buttons -->
             <div class="panel-ft">
-                <a href="{{$game->download}}" class="btn btn-download j-press" >Download</a>
+                <a href="{{url('download', $game->id)}}" class="btn btn-download j-press" >Download</a>
             </div>
         </div>
         <div class="panel panel-rate">
