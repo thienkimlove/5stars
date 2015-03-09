@@ -12,8 +12,8 @@ class CrawlerController extends Controller
      */
     public function index()
     {
-        $crawler = new ReaderCrawler();
-        $crawler->createPackages();
+        //$crawler = new ReaderCrawler();
+       // $crawler->createPackages();
     }
 
     /**

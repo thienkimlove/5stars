@@ -24,7 +24,7 @@
                             </p>
                         </div>
                     </a>
-                    <a class="btn-download j-press" href="{{$game->download}}">Download</a>
+                    <a class="btn-download j-press" href="{{url('download', $game->id)}}">Download</a>
                 </li>
                 @endforeach
              </ul>
