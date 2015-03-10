@@ -231,25 +231,30 @@ class MainCrawler {
                 $category = Category::create(['name' => $data['category'], 'icon' => $data['icon'], 'type' => $data['type']]);
             }
             $data['category_id'] = $category->id;
-            $game = Game::create($data);
-            foreach ($data['screens'] as $urlCapture) {
-                $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
-                if ($urlCapture) {
-                    Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
-                }
-            }
             try {
-                Package::create([
-                    'game_id' => $game->id,
-                    'name' => $package
-                ]);
+                $game = Game::create($data);
+                foreach ($data['screens'] as $urlCapture) {
+                    $urlCapture = $this->saveImageFromLink($urlCapture, 'captures');
+                    if ($urlCapture) {
+                        Capture::create(['name' => $urlCapture, 'game_id' => $game->id]);
+                    }
+                }
+                try {
+                    Package::create([
+                        'game_id' => $game->id,
+                        'name' => $package
+                    ]);
+                } catch (QueryException $e) {
+                    DB::table('packages')->where('name', $package)->delete();
+                    Package::create([
+                        'game_id' => $game->id,
+                        'name' => $package
+                    ]);
+                }
             } catch (QueryException $e) {
-                DB::table('packages')->where('name', $package)->delete();
-                Package::create([
-                    'game_id' => $game->id,
-                    'name' => $package
-                ]);
+                return;
             }
+
         }
     }
     /**

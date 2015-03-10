@@ -1,9 +1,6 @@
 <?php namespace App\Http\Controllers;
 
-use App\Crawlers\GoogleCrawler;
 use App\Crawlers\MainCrawler;
-use App\Crawlers\ReaderCrawler;
-
 class CrawlerController extends Controller
 {
 
@@ -14,6 +11,7 @@ class CrawlerController extends Controller
     {
         //$crawler = new ReaderCrawler();
        // $crawler->createPackages();
+
     }
 
     /**
