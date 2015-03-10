@@ -12,6 +12,7 @@ namespace App\Crawlers;
 use App\Capture;
 use App\Game;
 use App\Http\Requests;
+use ErrorException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use Illuminate\Support\Facades\DB;
@@ -267,7 +268,14 @@ class MainCrawler {
         $download = null;
         if ($game) {
             if ($game->site == 'https://play.google.com') {
-                $package = $game->package->name;
+                try {
+                    $package = $game->package->name;
+                } catch (ErrorException $e) {
+                    $temp  = str_replace('https://play.google.com/store/apps/details?id=', '', $game->link);
+                    $temp = str_replace('&hl=en&gl=us', '', $temp);
+                    $package = trim($temp);
+                    Package::create(['name' => $package, 'game_id' =>  $game->id]);
+                }
                 $download = $this->getLinkDownloadApk($package);
                 if (!$download || ($download == 'http://downloader-apk.com/')) {
                     $download = 'https://play.google.com/store/apps/details?id='.$package.'&hl=en&gl=us';
@@ -278,5 +286,7 @@ class MainCrawler {
         }
         return ($download) ? redirect($download) : redirect('/');
     }
+
+
 
 }
