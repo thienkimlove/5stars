@@ -268,14 +268,7 @@ class MainCrawler {
         $download = null;
         if ($game) {
             if ($game->site == 'https://play.google.com') {
-                try {
-                    $package = $game->package->name;
-                } catch (ErrorException $e) {
-                    $temp  = str_replace('https://play.google.com/store/apps/details?id=', '', $game->link);
-                    $temp = str_replace('&hl=en&gl=us', '', $temp);
-                    $package = trim($temp);
-                    Package::create(['name' => $package, 'game_id' =>  $game->id]);
-                }
+                $package = $game->package->name;
                 $download = $this->getLinkDownloadApk($package);
                 if (!$download || ($download == 'http://downloader-apk.com/')) {
                     $download = 'https://play.google.com/store/apps/details?id='.$package.'&hl=en&gl=us';
@@ -286,7 +279,31 @@ class MainCrawler {
         }
         return ($download) ? redirect($download) : redirect('/');
     }
+    public function fix()
+    {
+        DB::table('packages')->truncate();
+        $games =  Game::all();
+        foreach ($games as $game) {
+            if ($game->site == 'http://www.9apps.com') {
+                $temp = str_replace('http://www.9apps.com/jump/down/', '', $game->download);
+                $temp = str_replace('/app/', '', $temp);
+                $temp = trim($temp);
 
+            } else {
+                $temp  = str_replace('https://play.google.com/store/apps/details?id=', '', $game->link);
+                $temp = str_replace('&hl=en&gl=us', '', $temp);
+                $temp = trim($temp);
+            }
+            $count = Package::where('name', $temp)->count();
+            if ($count == 0) {
+                Package::create([
+                    'game_id' => $game->id,
+                    'name' => $temp
+                ]);
+            }
 
+        }
+
+    }
 
 }
