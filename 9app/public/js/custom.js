@@ -37,7 +37,7 @@ app.controller('EndSearchController', function($scope, $window, $http){
         return Config.url + '/images/avatars/' + icon;
     }
 
-    $scope.makeDownload = function(id) {
+    $scope.makeDownload = function(slug) {
         return Config.url  + '/download-free/' + slug;
     }
 
