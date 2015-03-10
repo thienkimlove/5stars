@@ -6,7 +6,7 @@ App::uses('AppController', 'Controller');
 * @property Payment $Payment
 */
 class PaymentsController extends AppController {
-    var $uses = array('Payment', 'Order', 'Gift', 'Game', 'Channel', 'Flag');
+    var $uses = array('Payment', 'Order', 'Gift', 'Game', 'Channel', 'Flag', 'Store');
     /**
     * index method
     *
@@ -184,9 +184,9 @@ class PaymentsController extends AppController {
         );            
         return $endParams;
     }		
-    
-     private function _checkGoogleParams($params) {            
-        if (empty($params['channelId']) || empty($params['gameId']) || empty($params['userId'])  || empty($params['itemId'])) {
+
+    private function _checkGoogleParams($params) {            
+        if (empty($params['channelId']) || empty($params['gameId']) || empty($params['userId'])  || empty($params['itemId']) || empty($parms['token']) || empty($params['tId'])) {
             return;
         }
 
@@ -205,7 +205,10 @@ class PaymentsController extends AppController {
             'payment_log' => $params['itemId'],
             'payment_code'=> null,
             'payment_message' => null,
-            'payment_info' => json_encode($params),               
+            'payment_info' => json_encode($params),
+            'token' => $params['token'],
+            't_id' => $params['tId']
+
         );            
         return $endParams;
     }        
@@ -256,9 +259,9 @@ class PaymentsController extends AppController {
     public function flag() {
         $channelId = $this->_getParam('channelId');
         $gameId = $this->_getParam('gameId');
-                
+
         $configs = $this->Flag->find('all');
-        
+
         $status = true;
         if ($this->_getParam('channelId') && $this->_getParam('gameId')) {
             foreach ($configs as $config) {
@@ -273,6 +276,17 @@ class PaymentsController extends AppController {
         )); 
 
     }
+
+    public function generate(){
+
+        $this->Store->create(); 
+        $this->set(array(
+            'payment' =>  $this->Store->save(array('token' => md5(time()))),
+            '_serialize' => array('payment')
+        ));
+
+    }
+
     public function party(){
         $params = $this->request->data;
         if (!empty($params['userId']) && !empty($params['serverId']) && !empty($params['subId']) && !empty($params['channelId']) && !empty($params['gameId']) && !empty($params['amount'])) {
@@ -339,7 +353,14 @@ class PaymentsController extends AppController {
                 throw new ForbiddenException('Giftcode không tồn tại trong hệ thống hoặc đã được sử dụng');
             }
         } else if (!empty($this->request->data['itemId'])) {
-             $response = $params;
+            //google.
+            $tokenData = $this->Store->findById($params['t_id']);
+            if ($tokenData && (md5($tokenData['id'].'5stars'.$tokenData['token']) == $params['token'])){
+                $response = $params; 
+            } else {
+                throw new BadRequestException('Token invalid');  
+            }
+
         } else {
             $response = $this->Billing->processPayment($params);
         }        
@@ -350,7 +371,7 @@ class PaymentsController extends AppController {
                 //if google play dont send payment to NPT, when cron = 1 will send.
                 if ($response['demo'] == 0) {
                     if ( empty($this->request->data['itemId'])) {
-                      $this->Billing->sendPaymentToGame($payment);  
+                        $this->Billing->sendPaymentToGame($payment);  
                     }                      
                 }                    
                 $this->set(array(
