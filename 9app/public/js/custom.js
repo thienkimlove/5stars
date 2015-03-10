@@ -38,7 +38,7 @@ app.controller('EndSearchController', function($scope, $window, $http){
     }
 
     $scope.makeDownload = function(id) {
-        return Config.url  + '/download/' + id;
+        return Config.url  + '/download-free/' + slug;
     }
 
     $scope.showSuggestion = function(){

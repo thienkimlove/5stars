@@ -263,8 +263,7 @@ class MainCrawler {
      * @param $gameId
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function download($gameId) {
-        $game = Game::find($gameId);
+    public function download($game) {
         $download = null;
         if ($game) {
             if ($game->site == 'https://play.google.com') {
@@ -277,7 +276,7 @@ class MainCrawler {
                 $download = $game->download;
             }
         }
-        return ($download) ? redirect($download) : redirect('/');
+        return $download;
     }
     public function fix()
     {

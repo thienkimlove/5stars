@@ -118,13 +118,30 @@ class MainController extends Controller
 
     /**
      * download game.
-     * @param $gameId
+     * @param $slug
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @internal param $gameId
      */
-    public function download($gameId)
+    public function download($slug)
     {
+        $css = 'details';
+        if (!$slug) {
+            return redirect('/');
+        }
+        $game = Game::where('slug', $slug)->first();
         $crawler = new MainCrawler();
-        return $crawler->download($gameId);
+        $download = $crawler->download($game);
+        if (!$download) {
+            return redirect('/');
+        }
+        $page = 'Direct Link download '.$game->title;
+        $relates = Game::where('category_id', $game->category_id)->take(16)->get();
+
+        return view('games.download', compact('game', 'page', 'relates', 'css', 'download'))->with([
+            'title' => $game->title . ' for Android Direct Link download Free - AppForAndroidPhone',
+            'desc' => 'Direct link download for '.$game->title.'  at AppForAndroidPhone.Com.',
+            'keyword' => 'direct link, get apk, download .apk, '.$game->title
+        ]);
     }
 
 }
