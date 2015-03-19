@@ -5,7 +5,7 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ url('files/favicon.ico') }}">
 
-    <title>Free Android Apps Download | Best Apps for Android Mobile Phone - AppForAndroidPhone</title>
+    <title>{{ $title }}</title>
     <meta property="og:type" content="website">
     <meta property="fb:app_id" content="579103738859108">
     <meta property="og:title" content="{{ $title  }}">

@@ -80,24 +80,7 @@ class MainCrawler {
         }
     }
 
-    /**
-     * get link download from download-apk.com
-     * @param $package
-     * @return string|void
-     */
-    protected function getLinkDownloadApk($package)
-    {
-        $response = $this->crawlerLink('http://downloader-apk.com/download/dl.php?dl=' . $package, false);
-        $response = preg_split('/\r\n|\n|\r/', $response);
-        foreach ($response as $line) {
-            if (strpos($line, "setTimeout('location.href=") !== false) {
-                $line = str_replace('setTimeout(\'location.href="..', 'http://downloader-apk.com', $line);
-                $line = str_replace('"\',25000);', '', $line);
-                return trim($line);
-            }
-        }
-        return;
-    }
+
 
     /**
      * get list of package name in table store and then process.
@@ -258,19 +241,62 @@ class MainCrawler {
 
         }
     }
+
+
+    /**
+     * get link download from download-apk.com
+     * @param $package
+     * @return string|void
+     */
+    protected function getLinkDownloadApk($package)
+    {
+        $response = $this->crawlerLink('http://downloader-apk.com/download/dl.php?dl=' . $package, false);
+        $response = preg_split('/\r\n|\n|\r/', $response);
+        foreach ($response as $line) {
+            if (strpos($line, "setTimeout('location.href=") !== false) {
+                $line = str_replace('setTimeout(\'location.href="..', 'http://downloader-apk.com', $line);
+                $line = str_replace('"\',25000);', '', $line);
+                return trim($line);
+            }
+        }
+        return;
+    }
+
+    /**
+     * download using device.
+     * @param $package
+     * @return string|void
+     * @internal param $game
+     */
+    protected function simulator($package)
+    {
+        if ($filename = @file_get_contents(env('DOWNLOAD_HOST').'?package='.$package)) {
+            $apkFile = '/tempApk/'.md5(time()).'.apk';
+            if (file_exists($filename)) {
+                copy($filename, public_path().$apkFile);
+                unlink($filename);
+                return url($apkFile);
+            }
+        }
+        return;
+    }
+
     /**
      * this function call when download any games.
-     * @param $gameId
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param $game
+     * @return string|void
      */
     public function download($game) {
-        $download = null;
+        $download = '';
         if ($game) {
             if ($game->site == 'https://play.google.com') {
                 $package = $game->package->name;
                 $download = $this->getLinkDownloadApk($package);
                 if (!$download || ($download == 'http://downloader-apk.com/')) {
-                    $download = 'https://play.google.com/store/apps/details?id='.$package.'&hl=en&gl=us';
+                    $download = $this->simulator($package);
+                    if (!$download) {
+                        $download = 'https://play.google.com/store/apps/details?id='.$package.'&hl=en&gl=us';
+                    }
                 }
             } else {
                 $download = $game->download;

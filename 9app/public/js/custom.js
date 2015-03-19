@@ -23,6 +23,22 @@ app.controller('SearchController', function($scope, $timeout, $window){
     }
 });
 
+app.controller('DownloadController', function($scope, $http){
+    $scope.link = null;
+    $scope.google = false;
+    $scope.loading = false;
+    $scope.getLink = function(id) {
+        $scope.loading = true;
+        $http.get(Config.url + '/downloadLink/' + id).then(function(response){
+           $scope.loading = false;
+           $scope.link = response.data.link;
+           if ($scope.link.indexOf('play.google.com')) {
+               $scope.google = true;
+           }
+        });
+    }
+});
+
 app.controller('EndSearchController', function($scope, $window, $http){
      $scope.keyword = Config.keyword;
      $scope.haveSuggestionData = false;

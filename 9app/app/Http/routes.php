@@ -25,6 +25,7 @@ Route::get('download-free/{slug}', 'MainController@download');
 Route::get('/', 'MainController@index');
 //ajaxE
 Route::post('suggestion', 'MainController@suggestion');
+Route::get('downloadLink/{id}', 'MainController@downloadLink');
 
 //sitemap
 

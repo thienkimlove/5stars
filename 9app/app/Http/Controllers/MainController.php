@@ -5,12 +5,13 @@ use App\Crawlers\MainCrawler;
 use App\Game;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class MainController extends Controller
 {
 
     /**
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index()
     {
@@ -28,7 +29,7 @@ class MainController extends Controller
 
     /**
      * @param $type
-     * @return \Illuminate\View\View
+     * @return View
      * @internal param $page
      * @internal param Request $request
      */
@@ -48,10 +49,7 @@ class MainController extends Controller
 
 
     /**
-     * @param $type
-     * @return \Illuminate\View\View
-     * @internal param $page
-     * @internal param Request $request
+     * @return View
      */
     public function apps()
     {
@@ -68,6 +66,10 @@ class MainController extends Controller
     }
 
 
+    /**
+     * @param $slug
+     * @return $this
+     */
     public function details($slug)
     {
         $css = 'details';
@@ -117,6 +119,24 @@ class MainController extends Controller
     }
 
     /**
+     * ajax get link download.
+     * @param $gameId
+     * @return Response
+     */
+    public function downloadLink($gameId)
+    {
+        $link = session()->get($gameId . '_download');
+        if (!$link) {
+            $game = Game::find($gameId);
+            $crawler = new MainCrawler();
+            $link = $crawler->download($game);
+            session()->put($gameId . '_download', $link);
+        }
+
+        return response()->json(['link' =>  $link]);
+    }
+
+    /**
      * download game.
      * @param $slug
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -129,15 +149,11 @@ class MainController extends Controller
             return redirect('/');
         }
         $game = Game::where('slug', $slug)->first();
-        $crawler = new MainCrawler();
-        $download = $crawler->download($game);
-        if (!$download) {
-            return redirect('/');
-        }
+
         $page = 'Direct Link download '.$game->title;
         $relates = Game::where('category_id', $game->category_id)->take(16)->get();
 
-        return view('games.download', compact('game', 'page', 'relates', 'css', 'download'))->with([
+        return view('games.download', compact('game', 'page', 'relates', 'css'))->with([
             'title' => $game->title . ' for Android Direct Link download Free - AppForAndroidPhone',
             'desc' => 'Direct link download for '.$game->title.'  at AppForAndroidPhone.Com.',
             'keyword' => 'direct link, get apk, download .apk, '.$game->title
