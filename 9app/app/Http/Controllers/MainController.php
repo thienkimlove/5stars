@@ -125,6 +125,7 @@ class MainController extends Controller
      */
     public function downloadLink($gameId)
     {
+        //return json to ajax.
         $link = session()->get($gameId . '_download');
         if (!$link) {
             $game = Game::find($gameId);
