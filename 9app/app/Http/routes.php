@@ -34,7 +34,7 @@ Route::get('store-sitemap', function()
     // create sitemap index
     $sitemap = App::make ("sitemap");
 
-    $games = DB::table('games')->orderBy('created_at', 'desc')->get();
+    $games = DB::table('games')->orderBy('created_at', 'desc')->limit(20000)->get();
     $categories = DB::table('categories')->get();
     $keywords = DB::table('keywords')->get();
 
